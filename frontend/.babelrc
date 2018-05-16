@@ -1,0 +1,25 @@
+{
+  "presets": [
+    "es2015",
+    "react",
+    "stage-1"
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        "transform-react-constant-elements",
+        "transform-react-remove-prop-types",
+        "transform-async-to-generator",
+        "transform-runtime"
+      ]
+    },
+    "production": {
+      "plugins": [
+        "transform-react-constant-elements",
+        "transform-react-remove-prop-types",
+        "transform-async-to-generator",
+        "transform-runtime"
+      ]
+    }
+  }
+}

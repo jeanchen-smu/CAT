@@ -1,0 +1,211 @@
+Downloading data for range  2017-06-26 2017-06-26
+Fetching position data for vehicle 34271
+Processing position chunk(0, 23)
+Processing position chunk(24, 47)
+Processing position chunk(48, 71)
+Processing position chunk(72, 95)
+Processing position chunk(96, 119)
+Processing position chunk(120, 143)
+Processing position chunk(144, 167)
+Processing position chunk(168, 191)
+Processing position chunk(192, 215)
+Processing position chunk(216, 239)
+Processing position chunk(240, 247)
+Starting event insertion worker
+Events inserted
+Starting position processing worker
+Position processed
+Fetching position data for vehicle 34296
+Processing position chunk(0, 149)
+Processing position chunk(150, 299)
+Processing position chunk(300, 449)
+Processing position chunk(450, 599)
+Processing position chunk(600, 749)
+Processing position chunk(750, 899)
+Processing position chunk(900, 1049)
+Processing position chunk(1050, 1199)
+Processing position chunk(1200, 1349)
+Processing position chunk(1350, 1499)
+Processing position chunk(1500, 1506)
+Starting event insertion worker
+Events inserted
+Starting position processing worker
+Position processed
+Starting position processing worker
+Position processed
+Starting position processing worker
+Position processed
+Starting position processing worker
+Position processed
+Starting position processing worker
+Position processed
+Starting position processing worker
+Position processed
+Starting position processing worker
+Position processed
+Starting position processing worker
+Position processed
+Starting position processing worker
+Position processed
+Starting position processing worker
+Position processed
+Starting position processing worker
+Position processed
+Fetching position data for vehicle 34298
+Processing position chunk(0, 86)
+Processing position chunk(87, 173)
+Processing position chunk(174, 260)
+Processing position chunk(261, 347)
+Processing position chunk(348, 434)
+Processing position chunk(435, 521)
+Processing position chunk(522, 608)
+Processing position chunk(609, 695)
+Processing position chunk(696, 782)
+Processing position chunk(783, 869)
+Processing position chunk(870, 871)
+Starting event insertion worker
+Events inserted
+Starting position processing worker
+Position processed
+Starting position processing worker
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - SSL error: decryption failed or bad record mac
+
+Starting position processing worker
+Exception - SSL SYSCALL error: EOF detected
+
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Starting position processing worker
+Exception - SSL SYSCALL error: EOF detected
+
+Exception - cursor already closed
+Exception - cursor already closed
+Starting position processing worker
+Exception - SSL SYSCALL error: EOF detected
+
+Exception - cursor already closed
+Exception - cursor already closed
+Starting position processing worker
+Exception - SSL SYSCALL error: EOF detected
+
+Exception - cursor already closed
+Exception - cursor already closed
+Starting position processing worker
+Starting position processing worker
+Starting position processing worker
+Starting position processing worker
+Exception - SSL SYSCALL error: EOF detected
+
+Exception - cursor already closed
+Exception - cursor already closed
+Starting position processing worker
+Starting position processing worker
+Exception - SSL SYSCALL error: EOF detected
+
+Starting position processing worker
+Exception - SSL error: decryption failed or bad record mac
+
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Starting position processing worker
+Exception - SSL SYSCALL error: EOF detected
+
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Starting position processing worker
+Exception - SSL SYSCALL error: EOF detected
+
+Starting position processing worker
+Exception - server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Starting position processing worker
+Exception - SSL SYSCALL error: EOF detected
+
+Exception - cursor already closed
+Exception - cursor already closed
+Starting position processing worker
+Exception - SSL SYSCALL error: EOF detected
+
+Starting position processing worker
+Exception - SSL SYSCALL error: EOF detected
+
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Fetching position data for vehicle 34299
+Starting position processing worker
+Exception - SSL SYSCALL error: EOF detected
+
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Exception - cursor already closed
+Starting position processing worker

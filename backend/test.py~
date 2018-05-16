@@ -1,0 +1,20 @@
+#!/usr/bin/env python2
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Jan  8 21:07:04 2018
+
+@author: jeanc
+"""
+
+post={}
+post['userId'] = 4
+post['qacoins'] = 0
+post['subject'] = "hahahaha"
+post['question'] = "hahahahah"
+post['dateTime'] = "2018-09-09 00:00"
+post["previous_post_id"] = 0
+from services import PostService, ForumService
+
+postService=PostService.Post()
+postService.getPosts(1,4)
+postService.get_user_stat(4)
