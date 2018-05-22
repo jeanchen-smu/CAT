@@ -253,3 +253,28 @@ survey_chat_sql = "select chat_id from avatar where avatar_id in (select avatar_
 
 vote_sql = """INSERT INTO vote (post_id, avatar_id, timestamp, vote) VALUES ({}, {}, '{}', {})
             ON DUPLICATE KEY UPDATE timestamp='{}', vote={}"""
+
+getSessions_sql = """select section_id from ((select avatar_id, section_id from avatar) 
+                    union (select avatar_id, section as section_id from a_section) ) 
+                     as T where avatar_id ={}"""
+
+getPostsBySection_sql = """SELECT post_id as 'key', post_subject as subject, 
+                qa_coin_bounty as qacoins, timestamp as date, 
+                (select count(*) from post	where question_id = p.post_id) as commentCounts,
+                (select count(*) from post where (isnull(reviewed) or reviewed=0) and 
+                (post_id=p.post_id or question_id=p.post_id)) as reviewCounts,
+                avatar_name as username FROM post p, avatar a 
+                WHERE is_question = 1 and p.avatar_id = a.avatar_id and 
+                (section_id='{}')
+                ORDER BY `timestamp` DESC"""
+
+getPostsByTopicSection_sql = """SELECT post_id as 'key', post_subject as subject, 
+                qa_coin_bounty as qacoins, timestamp as date, 
+                (select count(*) from post	where question_id = p.post_id) as commentCounts,
+                (select count(*) from post where (isnull(reviewed) or reviewed=0) and 
+                (post_id=p.post_id or question_id=p.post_id)) as reviewCounts,
+                avatar_name as username FROM post p, avatar a 
+                WHERE is_question = 1 and p.avatar_id = a.avatar_id and post_id in (select post_id from post_tag where tag_id in (select tag_id from 
+                tag_topic where topic_id ={}) and association > {}) and 
+                (section_id='{}')
+                ORDER BY `timestamp` DESC"""

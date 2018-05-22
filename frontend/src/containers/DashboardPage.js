@@ -7,7 +7,7 @@ import NewPost from "./../components/forumPage/newPost";
 import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
 import {connect} from 'react-redux';
-import {SetPost, GetTopics, CloseSearch, UpdateTopic, GetPosts} from "./../actions/forumAction";
+import {SetPost, GetTopics, CloseSearch, UpdateTopic, GetPosts, GetSessions, UpdateSection} from "./../actions/forumAction";
 import {SetQaCoins, ResetQaCoins, SetDate, SetDateTime} from "./../actions/newPostAction";
 import moment from "moment";
 import SelectField from 'material-ui/SelectField';
@@ -55,14 +55,37 @@ class DashboardPage extends React.Component {
         );
     }
 
+    sessionMenuItem(session) {
+        return (
+            <MenuItem
+                key={session.section_id}
+                value={session.section_id}
+                primaryText={session.section_id}
+            />
+        )
+    }
+
     handleTopicChange(event, index, value) {
         this.props.updateTopic({value}.value);
         this.props.getPosts(
             sessionStorage.getItem("access_token"),
-            {value}.value!=0?{
+            {
                 topic_id: {value}.value,
-		userId: sessionStorage.getItem("userId")
-          }:{userId: sessionStorage.getItem("userId")} 
+                section_id: this.props.session,
+                userId: this.props.userId
+            }
+        )
+    }
+
+    handleSectionChange(event, index, value) {
+        this.props.updateSection({value}.value);
+        this.props.getPosts(
+            sessionStorage.getItem("access_token"),
+            {
+                topic_id: this.props.topic,
+                section_id: {value}.value,
+                userId: this.props.userId
+            }
         )
     }
 
@@ -79,7 +102,9 @@ class DashboardPage extends React.Component {
                         secondary={true}
                         onClick={()=>{
                             if(!this.props.search){
-                                this.props.getTopics(sessionStorage.getItem("access_token"))
+                                this.props.getTopics(sessionStorage.getItem("access_token")),
+                                this.props.getSessions(sessionStorage.getItem("access_token"),
+                                this.props.userId)
                             }
                             else{
                                 this.props.closeSearch()
@@ -102,6 +127,7 @@ class DashboardPage extends React.Component {
                             hintText="Search By Topic"
                             value={this.props.topic}
                             onChange={this.handleTopicChange.bind(this)}
+                            style={{marginRight:50}}
                         >
                             <MenuItem
                                 key={0}
@@ -110,6 +136,22 @@ class DashboardPage extends React.Component {
                             />
                             {this.props.topics.map(this.topicMenuItem, this)}
                         </SelectField>
+                        {
+                            this.props.isTeacher?
+                            <SelectField
+                                hintText="Search By Section"
+                                value={this.props.session}
+                                onChange={this.handleSectionChange.bind(this)}
+                            >
+                                <MenuItem
+                                    key={0}
+                                    value={0}
+                                    primaryText="NONE"
+                                />
+                                {this.props.sessions.map(this.sessionMenuItem, this)}
+                            </SelectField>:null
+                        }
+                        
                     </Paper>
                 </div>:null
                 }
@@ -131,8 +173,11 @@ const mapStateToProps = (state) => {
       newPost: state.newPost,
       userId: state.login.user.userId,
       topics: state.forum.topics,
+      sessions: state.forum.sessions,
       search: state.forum.search,
-      topic: state.forum.filter.topic_id
+      topic: state.forum.filter.topic_id,
+      session: state.forum.filter.session,
+      isTeacher: state.login.user.is_teacher
   };
 };
 
@@ -156,11 +201,17 @@ const mapDispatchToProps = (dispatch) => {
     getTopics: (access_token) => {
         dispatch(GetTopics(access_token))
     },
+    getSessions: (access_token, userId) => {
+        dispatch(GetSessions(access_token, userId))
+    },
     closeSearch: () => {
         dispatch(CloseSearch())
     },
     updateTopic: (topic) => {
         dispatch(UpdateTopic(topic))
+    },
+    updateSection: (section) => {
+        dispatch(UpdateSection(section))
     },
     getPosts: (access_token, filter) => {
         dispatch(GetPosts(access_token, filter))

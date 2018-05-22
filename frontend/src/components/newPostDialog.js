@@ -59,7 +59,7 @@ class NewPostDialog extends React.Component {
     handleSetPost() {
         this.props.setPost(
             sessionStorage.getItem("access_token"),
-            1,
+            {userId: this.props.user.userId},
             this.setPostObject()
         )
     }

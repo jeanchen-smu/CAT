@@ -81,10 +81,18 @@ class Post(Forum):
 
     def getPosts(self, filter):
         self._init_con()
-        if 'topic_id' not in filter.keys():
+        if 'topic_id' not in filter:
             self.cur.execute(sql.getPosts_sql.format(filter['userId'], filter['userId']))
-        else:
+        elif filter['topic_id'] == 0 and filter['section_id'] == 0:
+            self.cur.execute(sql.getPosts_sql.format(filter['userId'], filter['userId']))
+        elif filter['section_id'] == 0:
             self.cur.execute(sql.getPostsByTopic_sql.format(filter['topic_id'], config.tag_association, filter['userId'], filter['userId']))
+        elif filter['topic_id'] == 0:
+            self.cur.execute(sql.getPostsBySection_sql.format(filter['section_id']))
+        else:
+            self.cur.execute(sql.getPostsByTopicSection_sql.format(filter['topic_id'], config.tag_association, filter['section_id']))
+            
+        
         values = self.cur.fetchall()
         for value in values:
             value['date'] = value['date'].strftime(config.date_format)
@@ -380,6 +388,16 @@ class Post(Forum):
             vote))
         self.con.commit()
         self._close()
+
+    def get_sessions(self, avatar_id):
+        self._init_con()
+        self.cur.execute(sql.getSessions_sql.format(avatar_id))
+        sessions = self.cur.fetchall()
+        self._close()
+        return list(sessions)
+
+    def get_new_thoughtfulness(self, post):
+        return {"new_thoughtfulness": random.randint(1,5)}  
         
 
     

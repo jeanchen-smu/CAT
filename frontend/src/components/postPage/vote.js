@@ -67,7 +67,7 @@ class Vote extends React.Component {
                     {this.props.upvotes}
                     </span>
                 </span>
-                <span style={{paddingRight: 15}}>
+                {/*<span style={{paddingRight: 15}}>
                     <IconButton 
                         iconStyle={{paddingBottom: 10}}
                         onClick={()=>{this.downVoteClick()}}
@@ -79,7 +79,7 @@ class Vote extends React.Component {
                         }
                     </IconButton>
                     {this.props.downvotes}
-                </span>
+                </span>*/}
             </span>
         );
     }

@@ -177,3 +177,19 @@ def set_vote():
     data = post.get_post(vote['avatar_id'], vote['questionId'])
     data['question']['isUser'] = (data['question']['userId']==vote['avatar_id'])
     return jsonify(data)
+
+@app.route("/get_sessions", methods=['POST'])
+@jwt_required
+def get_sessions():
+    avatar_id = request.json.get("avatar_id")
+    return jsonify(post.get_sessions(avatar_id))
+
+@app.route("/getnewts", methods=['POST'])
+@jwt_required
+def get_newts():
+    t_post = request.json.get("post")
+    if t_post['subject'] != None:
+        t_post['subject'] = process_string(t_post['subject'])
+    t_post['content'] = process_string(t_post['content'])
+    data = post.get_new_thoughtfulness(t_post)   
+    return jsonify(data)

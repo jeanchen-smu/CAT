@@ -7,15 +7,22 @@ export default function ForumReducer(state={
     newPost: {
         post_id:null,
         thoughtfulness:null,
-        subject:null
+        subject:null,
+        content:null,
+        new_subject:null,
+        new_content:null,
+        new_thoughtfulness:null
     },
     topics:[],
+    sessions:[],
     filter:{
-        topic_id: null
+        topic_id: 0,
+        session: 0
     },
     search: false,
     tags:{},
     editPost: false,
+    newEditPost: false,
     error: null
 }, action){
     switch(action.type){
@@ -43,7 +50,7 @@ export default function ForumReducer(state={
                 ...state,
                 posts: action.payload,
                 totalPage: action.payload.length,
-                currentPage: 1,
+                currentPage: action.payload.length,
                 fetched: true,
                 fetching: false,
                 error: null
@@ -78,10 +85,18 @@ export default function ForumReducer(state={
         case "GET_THOUGHTFULNESS_SUCCEED": {
             return {
                 ...state,
-                newPost: action.payload
+                newPost: {
+                    ...state,
+                    post_id: action.payload.post_id,
+                    thoughtfulness: action.payload.thoughtfulness,
+                    subject: action.payload.subject,
+                    content: action.payload.content,
+                    new_subject: action.payload.subject,
+                    new_content: action.payload.content
+                }
             }
         }
-        case "GET_THOUGHTFULNESS_SUCCEED": {
+        case "GET_THOUGHTFULNESS_FAIL": {
             return {
                 ...state,
                 error: action.payload
@@ -93,7 +108,11 @@ export default function ForumReducer(state={
                 newPost: {
                     post_id:null,
                     thoughtfulness:null,
-                    subject:null
+                    subject:null,
+                    content:null,
+                    new_subject:null,
+                    new_content:null,
+                    new_thoughtfulness:null
                 }
             }
         }
@@ -108,7 +127,7 @@ export default function ForumReducer(state={
                 ...state,
                 newPost: {
                     ...state.newPost,
-                    subject: action.payload
+                    new_subject: action.payload
                 }
             }
         }
@@ -117,7 +136,7 @@ export default function ForumReducer(state={
                 ...state,
                 newPost: {
                     ...state.newPost,
-                    content: action.payload
+                    new_content: action.payload
                 }
             }
         }
@@ -141,6 +160,44 @@ export default function ForumReducer(state={
                     ...state.filter,
                     topic_id: action.payload
                 }
+            }
+        }
+        case "GET_SESSIONS_SUCCEED": {
+            return {
+                ...state,
+                sessions: action.payload,
+                search: true
+            }
+        }
+        case "UPDATE_SECTION": {
+            return {
+                ...state,
+                filter: {
+                    ...state.filter,
+                    session: action.payload
+                }
+            }
+        }
+        case "NEW_EDIT_POST_OPEN": {
+            return {
+                ...state,
+                newEditPost: !state.newEditPost
+            }
+        }
+        case "GET_NEW_THOUGHTFULNESS_SUCCEED": {
+            return {
+                ...state,
+                newPost:{
+                    ...state.newPost,
+                    new_thoughtfulness: action.payload.new_thoughtfulness
+                }
+                
+            }
+        }
+        case "GET_NEW_THOUGHTFULNESS_FAIL": {
+            return {
+                ...state,
+                error: action.payload
             }
         }
     };

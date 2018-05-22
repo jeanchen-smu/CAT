@@ -10,7 +10,9 @@ import {SetPost,
         UpdateNewPostContent, 
         UpdateNewPostSubject,
         EditPostOpen,
-        ClearNewPost} from './../actions/forumAction';
+        ClearNewPost,
+        NewEditPostOpen,
+        GetNewTS} from './../actions/forumAction';
 import {ResetNewPost} from "./../actions/newPostAction";
 import {SetAnswer,UpdateAnswer, ResetAnswer} from "../actions/questionAction";
 import {AnswerReplyOpen, AnswerReplyClose} from './../actions/navAction';
@@ -32,11 +34,11 @@ class EditPostDialog extends React.Component {
         }
     }
     
-    answerObj() {
+    answerObj(isNewPost) {
         return {
             questionId: this.props.questionId,
             userId: this.props.user.userId,
-            answer: this.props.newPost.content,
+            answer: isNewPost?this.props.newPost.new_content:this.props.newPost.content,
             level: this.props.parentId==null?2:this.props.level + 1,
             parentId: this.props.parentId==null?this.props.questionId:this.props.parentId,
             edit: true,
@@ -44,19 +46,29 @@ class EditPostDialog extends React.Component {
         }
     }
 
-    handleAnswerRelpySub() {
-        let answerObj = this.answerObj();
+    handleAnswerRelpySub(isNewPost) {
+        let answerObj = this.answerObj(isNewPost);
         this.props.setAnswer(
             sessionStorage.getItem("access_token"),
             answerObj
         );
     }
 
-    setPostObject() {
+    handleGetNewTS(){
+        this.props.getNewTs(
+            sessionStorage.getItem("access_token"),
+            {
+                subject: this.props.newPost.subject,
+                content: this.props.newPost.content
+            }
+        )
+    }
+
+    setPostObject(isNewPost) {
         return{
             qacoins: this.props.qacoins,
-            subject: this.props.newPost.subject,
-            question: this.props.newPost.content,
+            subject: isNewPost?this.props.newPost.new_subject:this.props.newPost.subject,
+            question: isNewPost?this.props.newPost.new_content:this.props.newPost.content,
             userId: this.props.user.userId,
             dateTime: this.props.dateTime,
             edit: true,
@@ -64,25 +76,26 @@ class EditPostDialog extends React.Component {
         }
     }
 
-    handleSetPost() {
+    handleSetPost(isNewPost) {
         this.props.setPost(
             sessionStorage.getItem("access_token"),
-            1,
-            this.setPostObject()
+            {userId: this.props.user.userId},
+            this.setPostObject(isNewPost)
         )
     }
 
-    handleNewPostSub() {
+    handleNewPostSub(isNewPost) {
         if (this.props.newPost.subject === null){
-            this.handleAnswerRelpySub();
+            this.handleAnswerRelpySub(isNewPost);
             this.props.answerReplyClose();
             this.props.resetAnswer();
         }
         else{
-            this.handleSetPost();
+            this.handleSetPost(isNewPost);
             this.props.resetNewPost();
         }
         this.props.editPostOpen();
+        this.props.newEditPostOpen();
         this.props.clearNewPost();
     }
 
@@ -91,10 +104,23 @@ class EditPostDialog extends React.Component {
             <FlatButton
                 label="Post"
                 primary={true}
-                onClick={()=>this.handleNewPostSub()}
+                onClick={()=>{this.props.newEditPostOpen(); this.handleGetNewTS()}}
             />,
         ];
+        const actions2 = [
+            <FlatButton
+                label="Select First Post"
+                primary={true}
+                onClick={()=>this.handleNewPostSub(false)}
+            />,
+            <FlatButton
+                label="Select Second Post"
+                primary={true}
+                onClick={()=>this.handleNewPostSub(true)}
+            />
+        ];
         return (
+            <div>
             <Dialog
                 title="Edit Post"
                 actions={actions}
@@ -112,7 +138,7 @@ class EditPostDialog extends React.Component {
                         floatingLabelText="Title"
                         fullWidth={true}
                         underlineShow={false}
-                        value={this.props.newPost.subject}
+                        value={this.props.newPost.new_subject}
                         onChange={()=>
                         this.props.updateNewPostSubject(this.refs.newPostTitle.getValue())}
                     />}
@@ -131,12 +157,23 @@ class EditPostDialog extends React.Component {
                         rows={5}
                         underlineShow={false}
                         fullWidth={true}
-                        value={this.props.newPost.content}
+                        value={this.props.newPost.new_content}
                         onChange={()=>
                         this.props.updateNewPostContent(this.refs.newPostContent.getValue())}
                     />
                     </Paper>
             </Dialog>
+            <Dialog
+                title="Select Post"
+                actions={actions2}
+                modal={false}
+                open={this.props.newEditPost}
+            >
+                Thoughtfulness score for your first post is {this.props.newPost.thoughtfulness}<br/>
+                Thoughtfulness score for your second post is {this.props.newPost.new_thoughtfulness}<br/>
+                Please select the post you want to proceed with.
+            </Dialog>
+            </div>
         )
     }
 }
@@ -146,6 +183,7 @@ const mapStateToProps = (state) => {
 	  nav: state.nav,
       newPost: state.forum.newPost,
       editPost: state.forum.editPost,
+      newEditPost: state.forum.newEditPost,
       questionId: state.ques.post.question.questionId,
       parentId: state.nav.answerReply,
       level: state.nav.answerReplyLevel,
@@ -160,6 +198,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         editPostOpen: () => {
             dispatch(EditPostOpen())
+        },
+        newEditPostOpen: () => {
+            dispatch(NewEditPostOpen())
         },
         clearNewPost: () => {
             dispatch(ClearNewPost())
@@ -184,6 +225,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         answerReplyClose: () => {
             dispatch(AnswerReplyClose())
+        },
+        getNewTs: (access_token, post) => {
+            dispatch(GetNewTS(access_token, post))
         }
     }
 }
