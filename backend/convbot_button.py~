@@ -51,16 +51,16 @@ def button(bot, update):
 
 def button_reply(bot, update, user_data):
     if update.message.text == 'TITLE':
-        update.message.reply_text('What is the title of your post?')
+        update.message.reply_text('Enter the title of your post.')
         return TITLE 
     elif update.message.text == 'CONTENT':
-        update.message.reply_text('What is your question in detail?')
+        update.message.reply_text('Enter the content of your post.')
         return CONTENT
     elif update.message.text == 'QACOIN':
-        update.message.reply_text('How many QA Coins you want to put? Send /skip if you dont want to.')
+        update.message.reply_text('Enter the number of QA Coins you want to use. Send /skip if you dont want to proceed.')
         return QACOIN
     elif update.message.text == 'TIMELIMIT':
-        update.message.reply_text('How many hours later would the QA Coins be expired? Send /skip if you dont want to.')
+        update.message.reply_text('Enter the time limit (in hours). Send /skip if you dont want to proceed.')
         return TIMELIMIT
     elif update.message.text == 'SUBMIT':
         if 'title' not in user_data:
@@ -70,10 +70,10 @@ def button_reply(bot, update, user_data):
             update.message.reply_text('Please fill in CONTENT.')
             return CONTENT
         elif ('qacoin' not in user_data) and ('timelimit' in user_data):
-            update.message.reply_text('Please fill in QACOIN. How many QA Coins you want to put?')
+            update.message.reply_text('Please fill in QACOIN. Enter the number of QA Coins you want to use. ')
             return QACOIN
         elif ('qacoin' in user_data) and ('timelimit' not in user_data):
-            update.message.reply_text('Please fill in TIMELIMIT. How many hours later would the QA Coins be expired?')
+            update.message.reply_text('Please fill in TIMELIMIT. Enter the time limit (in hours).')
             return TIMELIMIT
         else:
             if 'qacoin' not in user_data:
@@ -88,7 +88,7 @@ def button_reply(bot, update, user_data):
                 return SECONDTRY
 	    except Exception as e:
 	        print e
-                update.message.reply_text('Fail: your post is not created')
+                update.message.reply_text('Failed: your post is not created')
 		user_data.clear()
                 return ConversationHandler.END
     elif update.message.text == 'FIRST':
@@ -96,13 +96,13 @@ def button_reply(bot, update, user_data):
 	    question_id = telegramService.newPost(user_data,user_data['thought'])
         except Exception as e:
 	    print e
-            update.message.reply_text('Fail: your post is not created')
+            update.message.reply_text('Failed: your post is not created')
             user_data.clear()
             return ConversationHandler.END
         p = subprocess.Popen(["python telePushMsg.py -i '{}' -q '{}' -t '{}' -c '{}' -w tele -o '{}' -l '{}'".format(
                 user_data['chat_id'], question_id, user_data['title'], user_data['content'], user_data['qacoin'], user_data['timelimit']
             )], shell=True)
-        update.message.reply_text('Succeed: your post is created')
+        update.message.reply_text('Your post is created')
         user_data.clear()
         return ConversationHandler.END
     elif update.message.text == 'SECOND':
@@ -112,17 +112,17 @@ def button_reply(bot, update, user_data):
 	    question_id = telegramService.newPost(user_data, user_data['thought2'], previous_id)
         except Exception as e:
 	    print e
-            update.message.reply_text('Fail: your post is not created')
+            update.message.reply_text('Failed: your post is not created')
             user_data.clear()
             return ConversationHandler.END
         p = subprocess.Popen(["python telePushMsg.py -i '{}' -q '{}' -t '{}' -c '{}' -w tele -o '{}' -l '{}'".format(
                 user_data['chat_id'], question_id, user_data['title'], user_data['content'], user_data['qacoin'], user_data['timelimit']
             )], shell=True)
-        update.message.reply_text('Succeed: your post is created')
+        update.message.reply_text('Your post is created')
         user_data.clear()
         return ConversationHandler.END
     elif update.message.text == 'CANCEL':
-        update.message.reply_text('Stop posting successfully.')
+        update.message.reply_text('Posting cancelled')
         user_data.clear()
         return ConversationHandler.END
 
@@ -133,7 +133,7 @@ def newpost(bot, update):
 		      ['QACOIN', 'TIMELIMIT'],
                       ['SUBMIT', 'CANCEL']]
     update.message.reply_text('Start a new post\n\n'
-        'Please choose a field to start with.',
+        'Select TITLE to begin.',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
     print update.message.chat_id
     return BUTTON_REPLY
@@ -147,13 +147,13 @@ def secondtry(bot, update, user_data):
 	    question_id = telegramService.newPost(user_data,thought)
         except Exception as e:
 	    print e
-            update.message.reply_text('Fail: your post is not created')
+            update.message.reply_text('Failed: your post is not created')
             user_data.clear()
             return ConversationHandler.END
         p = subprocess.Popen(["python telePushMsg.py -i '{}' -q '{}' -t '{}' -c '{}' -w tele -o '{}' -l '{}'".format(
                 user_data['chat_id'], question_id, user_data['title'], user_data['content'], user_data['qacoin'], user_data['timelimit']
             )], shell=True)
-        update.message.reply_text('Succeed: your post is created')
+        update.message.reply_text('Your post is created')
         user_data.clear()
         return ConversationHandler.END
     elif update.message.text == 'YES':
@@ -172,7 +172,7 @@ def content2(bot, update, user_data):
         return BUTTON_REPLY
     except Exception as e:
 	print e
-	update.message.reply_text('Fail: your post is not created')
+	update.message.reply_text('Failed: your post is not created')
 	user_data.clear()
 	return ConversationHandler.END
 	
@@ -184,7 +184,7 @@ def title(bot, update, user_data):
     reply_keyboard = [['TITLE', 'CONTENT'],
 		      ['QACOIN', 'TIMELIMIT'],
                       ['SUBMIT', 'CANCEL']]
-    update.message.reply_text('Please choose another field.',
+    update.message.reply_text('Select CONTENT.',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
     return BUTTON_REPLY
 
@@ -196,7 +196,7 @@ def content(bot, update, user_data):
     reply_keyboard = [['TITLE', 'CONTENT'],
 		      ['QACOIN', 'TIMELIMIT'],
                       ['SUBMIT', 'CANCEL']]
-    update.message.reply_text('Please choose another field.',
+    update.message.reply_text('Please choose QACOIN, TIMELIMIT, SUBMIT or CANCEL.',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
     return BUTTON_REPLY
 
@@ -211,7 +211,7 @@ def qacoin(bot, update, user_data):
                         ['SUBMIT', 'CANCEL']]
     try:
         if user_qacoin >= int(update.message.text):
-            reply_text = "Please choose another field."
+            reply_text = "Please choose QACOIN, TIMELIMIT, SUBMIT or CANCEL."
         user_data['qacoin']=update.message.text
         update.message.reply_text(reply_text,
             reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
@@ -247,7 +247,7 @@ def timelimit(bot, update, user_data):
 def cancel(bot, update, user_data):
     user = update.message.from_user
     logger.info("User %s canceled the posting process." % user.first_name)
-    bot.send_message(chat_id = update.message.chat_id, text = 'Stop posting successfully.')
+    bot.send_message(chat_id = update.message.chat_id, text = 'Posting cancelled')
     user_data.clear()
     return ConversationHandler.END
 
@@ -279,17 +279,17 @@ def answer_reply(bot, update, user_data):
                 question_id, answer_id = telegramService.reply2Reply(user_data)
             except Exception as e:
                 print e
-                update.message.reply_text('Fail: your reply is not created')
+                update.message.reply_text('Failed: your reply is not created')
                 user_data.clear()
                 return ConversationHandler.END
-            update.message.reply_text('Succeed: your reply is created')
+            update.message.reply_text('Your post is created')
             p = subprocess.Popen(["python telePushMsg.py -i '{}' -q '{}' -a '{}' -t '{}' -c '{}' -w tele".format(
                 user_data['chat_id'], question_id, answer_id, "no title", user_data['answer']
             )], shell=True)
             user_data.clear()
             return ConversationHandler.END
     elif update.message.text == 'CANCEL':
-        update.message.reply_text('Stop posting successfully.')
+        update.message.reply_text('Posting cancelled')
         user_data.clear()
         return ConversationHandler.END
 
@@ -327,7 +327,7 @@ def account_verify(bot, update, user_data):
         username = update.effective_user.username
         if telegramService.verify_telgram(username):
             telegramService.upsert_chat_id(user_id, username)
-            update.message.reply_text('Succed: your account has been verified.')
+            update.message.reply_text('Your account has been verified.')
             user_data.clear()
             return ConversationHandler.END
         update.message.reply_text('Failed: your account cannot be verified.')
@@ -389,29 +389,29 @@ def reply_button(bot, update, user_data):
 	thought = user_data['thought']
 	question_id = user_data['question_id']
 	if user_data['a'] == 1:
-	    reply_text = 'Your answer to post id '+str(question_id)+' is posted successfully.'
+	    reply_text = 'Your post is created.'
 	    try:
 		answer_id = telegramService.replyToReply(user_data, thought)
 	    except Exception as e :
 		print e
-		reply_text = 'Your answer to post id '+question_id+' is not posted.'
+		reply_text = 'Failed: Your post is not created.'
 		bot.send_message(chat_id=update.message.chat_id, text=reply_text)
 		user_data.clear()
 		return ConversationHandler.END
 	else:
-            reply_text = 'Your answer to question id '+str(question_id)+' is posted successfully.'
+            reply_text = 'Your post is created.'
 	    try:
 		answer_id = telegramService.replyToPost(user_data, thought)
 	    except Exception as e :
 		print e
-		reply_text = 'Your answer to question id '+str(question_id)+' is not posted.'
+		reply_text = 'Failed: Your post is not created.'
 		bot.send_message(chat_id=update.message.chat_id, text=reply_text)
 		user_data.clear()
 		return ConversationHandler.END
         p = subprocess.Popen(["python telePushMsg.py -i '{}' -q '{}' -a '{}' -t '{}' -c '{}' -w tele".format(
                 user_data['chat_id'], question_id, answer_id, "no title", user_data['answer']
             )], shell=True) 
-        update.message.reply_text('Succeed: your post is created')
+        update.message.reply_text('Your post is created')
         user_data.clear()
         return ConversationHandler.END
     elif update.message.text == 'SECOND':
@@ -422,26 +422,26 @@ def reply_button(bot, update, user_data):
 	previous_id = telegramService.insert_abandoned_post(user_data, 0, thought)
 	question_id = user_data['question_id']
 	if user_data['a'] == 1:
-	    reply_text = 'Your answer to post id '+str(question_id)+' is posted successfully.'
+	    reply_text = 'Your post is created.'
 	    try:
 		answer_id = telegramService.replyToReply(user_data, thought2)
 	    except Exception as e :
 		print e
-		reply_text = 'Your answer to post id '+str(question_id)+' is not posted.'
+		reply_text = 'Failed: Your post is not created.'
 		bot.send_message(chat_id=update.message.chat_id, text=reply_text)
 		user_data.clear()
 		return ConversationHandler.END
 	else:
-            reply_text = 'Your answer to question id '+str(question_id)+' is posted successfully.'
+            reply_text = 'Your post is created'
 	    try:
 		answer_id = telegramService.replyToPost(user_data, thought2)
 	    except Exception as e :
 		print e
-		reply_text = 'Your answer to question id '+str(question_id)+' is not posted.'
+		reply_text = 'Failed: Your post is not created.'
 		bot.send_message(chat_id=update.message.chat_id, text=reply_text)
 		user_data.clear()
 		return ConversationHandler.END
-	update.message.reply_text('Succeed: your post is created')
+	update.message.reply_text('Your post is created')
         p = subprocess.Popen(["python telePushMsg.py -i '{}' -q '{}' -a '{}' -t '{}' -c '{}' -w tele".format(
                 user_data['chat_id'], question_id, answer_id, "no title", user_data['answer']
             )], shell=True) 
@@ -455,22 +455,22 @@ def secondtry_reply(bot, update, user_data):
 	thought = user_data['thought']
 	question_id = user_data['question_id']
 	if user_data['a'] == 1:
-	    reply_text = 'Your answer to post id '+question_id+' is posted successfully.'
+	    reply_text = 'Your post is created'
 	    try:
 		answer_id = telegramService.replyToReply(user_data, thought)
 	    except Exception as e :
 		print e
-		reply_text = 'Your answer to post id '+question_id+' is not posted.'
+		reply_text = 'Failed: Your post is not created.'
 		bot.send_message(chat_id=update.message.chat_id, text=reply_text)
 		user_data.clear()
 		return ConversationHandler.END
 	else:
-            reply_text = 'Your answer to question id '+question_id+' is posted successfully.'
+            reply_text = 'Your post is created.'
 	    try:
 		answer_id = telegramService.replyToPost(user_data, thought)
 	    except Exception as e :
 		print e
-		reply_text = 'Your answer to question id '+question_id+' is not posted.'
+		reply_text = 'Failed: Your post is not created.'
 		bot.send_message(chat_id=update.message.chat_id, text=reply_text)
 		user_data.clear()
 		return ConversationHandler.END
@@ -481,7 +481,7 @@ def secondtry_reply(bot, update, user_data):
         user_data.clear()
         return ConversationHandler.END
     elif update.message.text == 'YES':
-	update.message.reply_text('What is your edited reply?')
+	update.message.reply_text('Enter your edited post.')
         return ANSWER2
 
 def answer2(bot, update, user_data):
@@ -495,7 +495,7 @@ def answer2(bot, update, user_data):
         return REPLY_BUTTON
     except Exception as e:
 	print e
-	update.message.reply_text('Your answer to question id '+user_data['question_id']+' is not posted.')
+	update.message.reply_text('Failed: Your post is not created.')
 	user_data.clear()
 	return ConversationHandler.END
 
@@ -507,7 +507,7 @@ def showall(bot, update):
 
 def answerid(bot, update, user_data):
     if update.message.text == 'CANCEL':
-        update.message.reply_text('Stop posting successfully.')
+        update.message.reply_text('Posting cancelled')
         user_data.clear()
         return ConversationHandler.END
     else:
@@ -531,11 +531,11 @@ def answerid(bot, update, user_data):
 
 def check(bot, update, user_data):
     if update.message.text == 'YES':
-        update.message.reply_text('What is the content of your reply?')
+        update.message.reply_text('Enter the content of your reply?')
 	user_data['a'] = 1
         return REPLYANSWER
     elif update.message.text == 'CANCEL':
-        update.message.reply_text('Stop posting successfully.')
+        update.message.reply_text('Posting cancelled')
         user_data.clear()
         return ConversationHandler.END
 
@@ -551,7 +551,7 @@ def replyanswer(bot, update, user_data):
         return SECONDTRY_REPLY
     except Exception as e:
 	print e
-        update.message.reply_text('Fail: your post is not created')
+        update.message.reply_text('Failed: your post is not created')
 	user_data.clear()
         return ConversationHandler.END
 

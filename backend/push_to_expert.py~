@@ -79,4 +79,4 @@ while True:
         telegramService.tele_push_inactive(post['avatar_id'][i], post['question_id'][i], post['post_subject'][i], post['post_content'][i], inactive_list)
         telegramService.tele_push_inactive(post['avatar_id'][i], post['question_id'][i], post['post_subject'][i], post['post_content'][i], noactive_list)
     print datetime.datetime.now()        
-    time.sleep(34560)
+    time.sleep(86400)

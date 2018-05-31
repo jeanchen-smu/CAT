@@ -42,7 +42,7 @@ while True:
                 (select sum(association) as total_ass, topic_id, post_id 
                 from post_tag pt 
                 left join tag_topic tt on pt.tag_id = tt.tag_id
-                group by topic_id, post_id) s0 left join post p on 
+                group by topic_id, post_id) s0 left join (select * from post where level > 1) p on 
                 s0.post_id = p.post_id) s3 left join
                 (select sum(total_ass) as all_ass, post_id from 
                 (select total_ass, avatar_id, thoughtfulness_score, p.post_id, topic_id from

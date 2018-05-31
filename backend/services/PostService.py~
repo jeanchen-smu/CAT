@@ -26,6 +26,7 @@ class Post(Forum):
 
     def newPost(self, post, thoughtfulness=None):
         self._init_con()
+	print post
         user_id = post['userId']
         qacoins = post['qacoins']
         subject = post['subject']
@@ -58,6 +59,7 @@ class Post(Forum):
 
     def replyToPost(self, post):
         self._init_con()
+	print post
         self.cur.execute(sql.replyToPost_insert_sql.format(
             post['userId'],
             post['answer'],
@@ -81,11 +83,18 @@ class Post(Forum):
 
     def getPosts(self, filter):
         self._init_con()
-        if 'topic_id' not in filter.keys():
-	    print sql.getPosts_sql
-            self.cur.execute(sql.getPosts_sql.format(filter['userId']))
+        if 'topic_id' not in filter:
+            self.cur.execute(sql.getPosts_sql.format(filter['userId'], filter['userId']))
+        elif filter['topic_id'] == 0 and filter['section_id'] == 0:
+            self.cur.execute(sql.getPosts_sql.format(filter['userId'], filter['userId']))
+        elif filter['section_id'] == 0:
+            self.cur.execute(sql.getPostsByTopic_sql.format(filter['topic_id'], config.tag_association, filter['userId'], filter['userId']))
+        elif filter['topic_id'] == 0:
+            self.cur.execute(sql.getPostsBySection_sql.format(filter['section_id']))
         else:
-            self.cur.execute(sql.getPostsByTopic_sql.format(filter['topic_id'], config.tag_association, filter['userId']))
+            self.cur.execute(sql.getPostsByTopicSection_sql.format(filter['topic_id'], config.tag_association, filter['section_id']))
+            
+        
         values = self.cur.fetchall()
         for value in values:
             value['date'] = value['date'].strftime(config.date_format)
@@ -138,8 +147,8 @@ class Post(Forum):
         cursor = self.cur.execute(sql.getTags_sql.format(post_id, config.tag_association))
         return list(self.cur.fetchall())
 
-    def _get_answers(self, post_id):
-        cursor = self.cur.execute(sql.getAnswer_sql.format(post_id))
+    def _get_answers(self, avatar_id, post_id):
+        cursor = self.cur.execute(sql.getAnswer_sql.format(avatar_id, post_id))
         return self._process_answers(list(self.cur.fetchall()))
 
     def _process_answers(self, answers):
@@ -183,17 +192,17 @@ class Post(Forum):
                             appended_answers[key].append(int(answer['answerId']))
         return processed_answers.values()
 
-    def _get_question(self, post_id):
-        cursor = self.cur.execute(sql.getPost_sql.format(post_id))
+    def _get_question(self, avatar_id, post_id):
+        cursor = self.cur.execute(sql.getPost_sql.format(avatar_id, post_id))
         return self.cur.fetchall()[0]
 
-    def get_post(self, post_id):
+    def get_post(self, avatar_id, post_id):
         result = {}
         self._init_con()
-        question = self._get_question(post_id)
+        question = self._get_question(avatar_id, post_id)
         question["reviewed"] = True if question["reviewed"]=="1" else False
         question['tags'] = self._get_tags(post_id)
-        answers = self._get_answers(post_id)
+        answers = self._get_answers(avatar_id, post_id)
         self._close()
         result['question'] = question
         result['answers'] = answers
@@ -369,6 +378,32 @@ class Post(Forum):
     def _insert_thought_sim(self, post_id):
 	self.cur.execute(sql.newUserThought_insert_sql.format(post_id, self.v1,self.v2,self.v3,self.v4,self.v5,self.v6,self.v7,self.v8,self.v9,self.v10,self.v11))
         self.con.commit()
+
+    def set_vote(self, post_id, avatar_id, vote):
+        self._init_con()
+        self.cur.execute(sql.vote_sql.format(
+            post_id, 
+            avatar_id, 
+            self._date()+" "+self._time(),
+            vote,
+            self._date()+" "+self._time(),
+            vote))
+        self.con.commit()
+        self._close()
+
+    def get_sessions(self, avatar_id):
+        self._init_con()
+        self.cur.execute(sql.getSessions_sql.format(avatar_id))
+        sessions = self.cur.fetchall()
+        self._close()
+        return list(sessions)
+
+    def get_new_thoughtfulness(self, post):
+	if not post['subject']:
+	    thought = self._thoughtfulness_score(post['content'], 0)
+	else:
+	    thought = self._thoughtfulness_score(post['content'], 1)
+        return {"new_thoughtfulness":thought}
         
 
     

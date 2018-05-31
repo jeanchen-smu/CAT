@@ -397,7 +397,11 @@ class Post(Forum):
         return list(sessions)
 
     def get_new_thoughtfulness(self, post):
-        return {"new_thoughtfulness": random.randint(1,5)}  
+	if not post['subject']:
+	    thought = self._thoughtfulness_score(post['content'], 0)
+	else:
+	    thought = self._thoughtfulness_score(post['content'], 1)
+        return {"new_thoughtfulness":thought}
         
 
     

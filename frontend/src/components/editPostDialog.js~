@@ -104,7 +104,7 @@ class EditPostDialog extends React.Component {
             <FlatButton
                 label="Post"
                 primary={true}
-                onClick={()=>{this.handleGetNewTS()}}
+                onClick={()=>{this.props.newEditPostOpen(); this.handleGetNewTS()}}
             />,
         ];
         const actions2 = [

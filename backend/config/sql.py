@@ -4,10 +4,10 @@ getStat_sql = """SELECT (ifnull(qa_gain,0)-ifnull(qa_lost, 0)+ifnull(s3.qacoin, 
 IFNULL(SUM(thoughtfulness_score),0) AS thoughfulness FROM avatar a, post p WHERE a.avatar_id = p.avatar_id and section_id=(select section_id from avatar where avatar_id={}) GROUP BY p.avatar_id) s0
 LEFT JOIN (SELECT avatar_id, IFNULL(SUM(qa_coin_bounty),0) AS qa_lost FROM post po WHERE time_limit_qa>CURDATE() GROUP BY avatar_id) s1
 on s0.avatar_id = s1.avatar_id) left join (select p.post_id as post_id, p.avatar_id as giver_id, po.avatar_id as receiver_id, po.post_id as answer_id, p.qa_coin_bounty as qacoin
-from post p join post po on p.post_id = po.question_id where p.time_limit_qa>=CURDATE() and p.qa_coin_bounty>0 and po.thoughtfulness_score>=3
+from post p join post po on p.post_id = po.question_id where p.time_limit_qa>=NOW() and p.qa_coin_bounty>0 and po.thoughtfulness_score>=2
 and po.timestamp < p.time_limit_qa order by  po.thoughtfulness_score desc limit 1) s3 on s0.avatar_id = s3.receiver_id
 left join (select p.post_id as post_id, p.avatar_id as giver_id, po.avatar_id as receiver_id, po.post_id as answer_id, p.qa_coin_bounty as qacoin
-from post p join post po on p.post_id = po.question_id where p.time_limit_qa>=CURDATE() and p.qa_coin_bounty>0 and po.thoughtfulness_score>=3
+from post p join post po on p.post_id = po.question_id where p.time_limit_qa>=NOW() and p.qa_coin_bounty>0 and po.thoughtfulness_score>=2
 and po.timestamp < p.time_limit_qa order by  po.thoughtfulness_score desc limit 1) s4 on s0.avatar_id = s4.giver_id
  ORDER BY thoughfulness DESC"""
 
@@ -216,11 +216,17 @@ teleReply2Reply_insert_sql = """INSERT INTO post (avatar_id, post_content, level
                             VALUES ((SELECT avatar_id from avatar where chat_id={}),
                              '{}', (select level from (select * from post) a where post_id={})+1, 0, {}, '{}', (select if(question_id=0, {}, question_id) from (select * from post) b where post_id={}), {}, {}, {})"""
 
-teleGetStat_sql = """SELECT (qa_gain-qa_lost) AS qacoins, section_id, username, thoughfulness, s0.avatar_id, s0.chat_id FROM
+teleGetStat_sql = """SELECT (ifnull(qa_gain,0)-ifnull(qa_lost, 0)+ifnull(s3.qacoin, 0)-ifnull(s4.qacoin, 0)) AS qacoins, section_id, username, thoughfulness, s0.chat_id, s0.avatar_id FROM
 ((SELECT p.avatar_id, a.avatar_name AS username, IFNULL(SUM(qa_coin_basic),0) AS qa_gain, section_id,
 IFNULL(SUM(thoughtfulness_score),0) AS thoughfulness, chat_id FROM avatar a, post p WHERE a.avatar_id = p.avatar_id and section_id=(select section_id from avatar where chat_id='{}') GROUP BY p.avatar_id) s0
-JOIN (SELECT avatar_id, IFNULL(SUM(qa_coin_bounty),0) AS qa_lost FROM post WHERE time_limit_qa<CURDATE() GROUP BY avatar_id) s1
-on s0.avatar_id = s1.avatar_id) ORDER BY thoughfulness DESC"""
+LEFT JOIN (SELECT avatar_id, IFNULL(SUM(qa_coin_bounty),0) AS qa_lost FROM post po WHERE time_limit_qa>CURDATE() GROUP BY avatar_id) s1
+on s0.avatar_id = s1.avatar_id) left join (select p.post_id as post_id, p.avatar_id as giver_id, po.avatar_id as receiver_id, po.post_id as answer_id, p.qa_coin_bounty as qacoin
+from post p join post po on p.post_id = po.question_id where p.time_limit_qa>=NOW() and p.qa_coin_bounty>0 and po.thoughtfulness_score>=2
+and po.timestamp < p.time_limit_qa order by  po.thoughtfulness_score desc limit 1) s3 on s0.avatar_id = s3.receiver_id
+left join (select p.post_id as post_id, p.avatar_id as giver_id, po.avatar_id as receiver_id, po.post_id as answer_id, p.qa_coin_bounty as qacoin
+from post p join post po on p.post_id = po.question_id where p.time_limit_qa>=NOW() and p.qa_coin_bounty>0 and po.thoughtfulness_score>=2
+and po.timestamp < p.time_limit_qa order by  po.thoughtfulness_score desc limit 1) s4 on s0.avatar_id = s4.giver_id
+ ORDER BY thoughfulness DESC"""
 
 upsertChatId_sql = """UPDATE avatar SET chat_id='{}' where telegram_account='{}'"""
 
