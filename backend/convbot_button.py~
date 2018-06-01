@@ -224,7 +224,7 @@ def skip(bot, update):
     reply_keyboard = [['TITLE', 'CONTENT'],
 		      ['QACOIN', 'TIMELIMIT'],
                       ['SUBMIT', 'CANCEL']]
-    update.message.reply_text('Please choose another field.',
+    update.message.reply_text('Please choose QACOIN, TIMELIMIT, SUBMIT or CANCEL.',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
     return BUTTON_REPLY
 
@@ -236,7 +236,7 @@ def timelimit(bot, update, user_data):
                       ['SUBMIT', 'CANCEL']]
     try:
         user_data['timelimit']=get_timelimit(float(update.message.text))
-        update.message.reply_text('Please choose another field.',
+        update.message.reply_text('Please choose QACOIN, TIMELIMIT, SUBMIT or CANCEL.',
             reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
     except:
         update.message.reply_text('Time Limit has to be a number, please choose TIMELIMIT.',
@@ -637,7 +637,14 @@ def surveyend(bot, update, user_data):
     return ConversationHandler.END
 
 
+def QAhistory(bot, update):
+    chat_id = update.message.chat_id
+    telegramService.QAhistory(chat_id)
 
+def Thistory(bot, update):
+    chat_id = update.message.chat_id
+    telegramService.Thistory(chat_id)
+    
 
 
 #def main():
@@ -741,6 +748,8 @@ dp.add_handler(verify_handler)
 dp.add_handler(start_handler)
 dp.add_handler(showall_handler)
 dp.add_handler(survey_handler)
+dp.add_handler(CommandHandler('QAhistory', QAhistory))
+dp.add_handler(CommandHandler('Thistory', Thistory))
 #unknown_handler = MessageHandler(Filters.text, unknown)
 #dp.add_handler(unknown_handler)
 dp.add_handler(re_handler)

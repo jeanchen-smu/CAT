@@ -106,11 +106,10 @@ class Telegram(Forum):
         self._close()
         return thought
 
-    def insert_abandoned_post(self, post):
+    def insert_abandoned_post(self, post, q_a, thought):
         self._init_con()
-        thoughtfulness = self._thoughtfulness_score(post['content'], 0 if post['title']==None else 1)
-        subject = "" if post['title'] == None else post['title'] 
-        insert_sql = sql.insertAbandonedPost_sql.format(subject, post['content'], thoughtfulness)
+        subject = "" if q_a == 0 else post['title'] 
+        insert_sql = sql.insertAbandonedPost_sql.format(subject, post['content'], thought)
         self.cur.execute(insert_sql)
         self.con.commit()
         post_id = self.cur.lastrowid
@@ -119,7 +118,7 @@ class Telegram(Forum):
 
     def tele_push_message(self, chat_id, question_id, title, content, answer_id, qa_coins=None, timelimit=None):
         self._init_con()
-        self.cur.execute(sql.teleGetChatId.format(chat_id))
+        self.cur.execute(sql.teleGetChatId.format(question_id,question_id))
         user_list = self.cur.fetchall()
         self._close()
 	post_user_name = ''
@@ -187,7 +186,7 @@ class Telegram(Forum):
 
     def web_push_message(self, userId, question_id, title, content,answer_id, qa_coins=None, timelimit=None):
         self._init_con()
-        self.cur.execute(sql.webGetChatId.format(userId))
+        self.cur.execute(sql.webGetChatId.format(question_id,question_id))
         user_list = self.cur.fetchall()
         self._close()
 	post_user_name = ''
@@ -396,3 +395,67 @@ class Telegram(Forum):
     def _insert_thought_sim(self, post_id):
 	self.cur.execute(sql.newUserThought_insert_sql.format(post_id, self.v1,self.v2,self.v3,self.v4,self.v5,self.v6,self.v7,self.v8,self.v9,self.v10,self.v11))
         self.con.commit()
+
+    def QAhistory(self, chat_id):
+	qacoin = 0
+        self._init_con()
+        self.cur.execute(sql.qabasic_sql.format(
+            chat_id
+        ))
+        qabasic = self.cur.fetchall()
+        self._close()
+	text = 'Basic QA coins:\n'
+        for qa in qabasic:
+	    qacoin += qa['qa_coin_basic']
+	    text=text+'post id:'+str(qa['post_id'])+'\n'+'QA coin:+'+str(round(qa['qa_coin_basic'],2))+'\n'+str(qa['timestamp'])+'\n\n'
+	self._init_con()
+        self.cur.execute(sql.qagive_sql.format(
+            chat_id
+        ))
+        qagive = self.cur.fetchall()
+        self._close()
+	if len(qagive)>0:
+	    text = text + '\n\nQA coins given out:\n'
+	    for qa in qagive:
+	        qacoin -= qa['qa_coin']
+	        text=text+'post id:'+str(qa['post_id'])+'\n'+'QA coin:-'+str(round(qa['qa_coin'],2))+'\n'+str(qa['timestamp'])+'\n\n'
+	self._init_con()
+        self.cur.execute(sql.qaearn_sql.format(
+            chat_id
+        ))
+        qaearn = self.cur.fetchall()
+        self._close()
+	if len(qaearn)>0:
+	    text = text + '\n\nQA coins earned (best answer for those questions with qa coin bounty):\n'
+	    for qa in qaearn:
+	        qacoin += qa['qa_coin']
+	        text=text+'post id:'+str(qa['post_id'])+'\n'+'QA coin:+'+str(round(qa['qa_coin'],2))+'\n'+str(qa['timestamp'])+'\n\n'
+	self._init_con()
+        self.cur.execute(sql.qaloss_sql.format(
+            chat_id
+        ))
+        qaloss = self.cur.fetchall()
+        self._close()
+	if len(qaloss)>0:
+	    text = text + '\n\nQA coins loss (hang for question but hasnot time limit yet):\n'
+	    for qa in qaloss:
+	        qacoin -= qa['qa_coin_bounty']
+	        text=text+'post id:'+str(qa['post_id'])+'\n'+'QA coin:-'+str(round(qa['qa_coin_bounty'],2))+'\n\n'
+	text = text + '\n\nTotal QA coins:' + str(round(qacoin,2))
+        self.bot.send_message(chat_id=chat_id, text=text)
+
+
+    def Thistory(self, chat_id):
+	score = 0
+        self._init_con()
+        self.cur.execute(sql.thought_sql.format(
+            chat_id
+        ))
+        thought = self.cur.fetchall()
+        self._close()
+	text = 'Thoughtfulness score:\n'
+        for t in thought:
+	    score += t['thoughtfulness_score']
+	    text=text+'post id:'+str(t['post_id'])+'\n'+'Thoughtfulness score:+'+str(round(t['thoughtfulness_score'],2))+'\n'+str(t['timestamp'])+'\n\n'
+	text = text + '\n\nTotal Thoughtfulness Score:' + str(round(score,2))
+        self.bot.send_message(chat_id=chat_id, text=text)

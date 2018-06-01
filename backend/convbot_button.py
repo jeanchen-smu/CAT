@@ -381,7 +381,7 @@ def look_for_reply(bot, update, user_data):
 	    return ConversationHandler.END
     else:
         bot.send_message(chat_id = update.message.chat_id, 
-             text = "Please quote and reply to a question or use the commands below.\n\nCommands:\nNew Post: /newpost \nShow A Series Of Posts: /showall \nAccount Verification: /verify")
+             text = "Please quote and reply to a question or use the commands below.\n\nCommands:\nNew Post: /newpost \nShow A Series Of Posts: /showall \nAccount Verification: /verify \nShow history for QA coins: /QAhistory \nShow history for Thoughtfulness Score: /Thistory")
 	return ConversationHandler.END
 
 def reply_button(bot, update, user_data):
@@ -637,7 +637,14 @@ def surveyend(bot, update, user_data):
     return ConversationHandler.END
 
 
+def QAhistory(bot, update):
+    chat_id = update.message.chat_id
+    telegramService.QAhistory(chat_id)
 
+def Thistory(bot, update):
+    chat_id = update.message.chat_id
+    telegramService.Thistory(chat_id)
+    
 
 
 #def main():
@@ -741,6 +748,8 @@ dp.add_handler(verify_handler)
 dp.add_handler(start_handler)
 dp.add_handler(showall_handler)
 dp.add_handler(survey_handler)
+dp.add_handler(CommandHandler('QAhistory', QAhistory))
+dp.add_handler(CommandHandler('Thistory', Thistory))
 #unknown_handler = MessageHandler(Filters.text, unknown)
 #dp.add_handler(unknown_handler)
 dp.add_handler(re_handler)
