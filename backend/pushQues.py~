@@ -30,9 +30,10 @@ while True:
        if len(reply) > 0:
            post = post[post['post_id'] != postId]
     sql_section = 'select * from avatar where avatar_id=%(avatarId)s'
-    sql_topic = '''select sum(association) as total_ass, tag_id
+    sql_topic = '''select sum(association) as total_ass, topic_id
             from (select * from post_tag where post_id=%(postId)s) pt 
-            group by tag_id'''
+            left join tag_topic tt on pt.tag_id = tt.tag_id
+            group by topic_id'''
     sql_score = '''select * from
                 (select sum(topic_thoughtfulness), avatar_id, topic_id from 
                 (select if(all_ass=0, 0, total_ass/all_ass)*thoughtfulness_score as 

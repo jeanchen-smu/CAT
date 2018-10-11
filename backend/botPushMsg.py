@@ -7,7 +7,7 @@ import time
 
 telegramService = Telegram()
 
-def main(argv, bot=None):
+def main(argv):
    chat_id = ''
    question_id = ''
    title = ''
@@ -42,6 +42,8 @@ def main(argv, bot=None):
       telegramService.tele_push_message(chat_id, question_id, title, content, answer_id, qa_coins, timelimit)
    elif source == "web":
       telegramService.web_push_message(chat_id, question_id, title, content, answer_id, qa_coins, timelimit)
+   elif source == "bot":
+      telegramService.bot_push_message(chat_id, question_id, title, content, answer_id, qa_coins, timelimit)
 
 
 if __name__ == "__main__":

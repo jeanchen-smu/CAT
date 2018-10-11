@@ -6,11 +6,14 @@ import pickle
 import time
 from services.PostService import Post 
 import json
+import datetime
 
 post = Post()
 
 app = Flask(__name__)
 app.secret_key = "JWT SECRET"
+app.config['JWT_EXPIRATION_DELTA'] = datetime.timedelta(seconds=3600)
+app.config['JWT_REFRESH_EXPIRATION_DELTA'] = datetime.timedelta(seconds=3600)
 jwt = JWTManager(app)
 
 def gen_tags():

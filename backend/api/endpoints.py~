@@ -6,11 +6,14 @@ import pickle
 import time
 from services.PostService import Post 
 import json
+import datetime
 
 post = Post()
 
 app = Flask(__name__)
 app.secret_key = "JWT SECRET"
+app.config['JWT_EXPIRATION_DELTA'] = datetime.timedelta(seconds=3600)
+app.config['JWT_REFRESH_EXPIRATION_DELTA'] = datetime.timedelta(seconds=3600)
 jwt = JWTManager(app)
 
 def gen_tags():
@@ -59,7 +62,6 @@ def get_user_stat():
 @jwt_required
 def get_posts():
     filter = request.json.get('filter')
-    print filter
     return jsonify(post.getPosts(filter))
 
 @app.route('/question', methods=['POST'])
@@ -67,7 +69,7 @@ def get_posts():
 def get_question():
     key = request.json.get('questionId')
     user_id = request.json.get('userId')
-    data = post.get_post(key)
+    data = post.get_post(user_id, key)
     data['question']['isUser'] = (data['question']['userId']==user_id)
     return jsonify(data)
 
@@ -98,7 +100,7 @@ def set_answer():
         post.delete_abandoned_post(answer['previous_post_id'])
         answer['previous_post_id'] = "null"
     post.replyToPost(answer)
-    data = post.get_post(answer['questionId'])
+    data = post.get_post(answer['userId'], answer['questionId'])
     data['question']['isUser'] = (data['question']['userId']==answer['userId'])
     return jsonify(data)
 
@@ -107,7 +109,7 @@ def set_answer():
 def set_thoughtfulness():
     t_post = request.json.get("post")
     post.insert_training_data(t_post)
-    data = post.get_post(t_post['questionId'])
+    data = post.get_post(t_post['userId'], t_post['questionId'])
     data['question']['isUser'] = (data['question']['userId']==t_post['userId'])
     return jsonify(data)
 
@@ -123,7 +125,7 @@ def get_vehicle_ranks():
 def add_tag():
     t_post = request.json.get("post")
     post.add_tag(t_post)
-    data = post.get_post(t_post['questionId'])
+    data = post.get_post(t_post['userId'], t_post['questionId'])
     data['question']['isUser'] = (data['question']['userId']==t_post['userId'])
     return jsonify(data)
 
@@ -132,7 +134,7 @@ def add_tag():
 def delete_tag():
     t_post = request.json.get("post")
     post.delete_tag(t_post)
-    data = post.get_post(t_post['questionId'])
+    data = post.get_post(t_post['userId'], t_post['questionId'])
     data['question']['isUser'] = (data['question']['userId']==t_post['userId'])
     return jsonify(data)
 
@@ -169,3 +171,28 @@ def set_username():
 @jwt_required
 def get_topics():
     return jsonify(post.get_topics())
+
+@app.route("/vote", methods=['POST'])
+@jwt_required
+def set_vote():
+    vote = request.json.get("vote")
+    post.set_vote(vote['post_id'], vote['avatar_id'], vote['vote'])
+    data = post.get_post(vote['avatar_id'], vote['questionId'])
+    data['question']['isUser'] = (data['question']['userId']==vote['avatar_id'])
+    return jsonify(data)
+
+@app.route("/get_sessions", methods=['POST'])
+@jwt_required
+def get_sessions():
+    avatar_id = request.json.get("avatar_id")
+    return jsonify(post.get_sessions(avatar_id))
+
+@app.route("/getnewts", methods=['POST'])
+@jwt_required
+def get_newts():
+    t_post = request.json.get("post")
+    if t_post['subject'] != None:
+        t_post['subject'] = process_string(t_post['subject'])
+    t_post['content'] = process_string(t_post['content'])
+    data = post.get_new_thoughtfulness(t_post)   
+    return jsonify(data)

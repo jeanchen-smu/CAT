@@ -27,7 +27,7 @@ class QuestionCard extends React.Component {
     render(){
         const styles = {
             questionCard: {
-                paddingBottom: this.props.nav.questionReply?40:65
+                paddingBottom: this.props.nav.questionReply?50:65
             }
         }
         return (

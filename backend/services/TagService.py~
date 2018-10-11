@@ -36,12 +36,10 @@ class Tag():
 	words = [re.sub(r'[^a-z]+', '', x) for x in doc1]
 	words = [w for w in words if w not in stop_list]
 	doc1 = [stemmer.stem(w) for w in words]
-	print doc1
 	X_test = self.model.infer_vector(doc1)
 	cos = cosine_similarity(X_test.reshape(1,-1), self.x)
 	top3 = cos[0][np.argsort(cos[0])[-3:]]
 	pos = [b for b,s in enumerate(cos[0]) if s >= min(top3)]
-	print pos
 	label = []
 	for j in pos:
     		label.append(self.y[j])

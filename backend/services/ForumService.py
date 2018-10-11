@@ -24,7 +24,16 @@ class Forum:
                                     db=config.db_schema,
                                     cursorclass=MySQLdb.cursors.DictCursor)
         if self.cur == None:
-            self.cur = self.con.cursor()
+	    try:
+		self.cur = self.con.cursor()
+	    except(AttributeError, MySQLdb.OperationalError):
+		self.con = MySQLdb.connect(host=config.db_host,   
+                                    port=config.db_port,   
+                                    user=config.db_username,         
+                                    passwd=config.db_password,  
+                                    db=config.db_schema,
+                                    cursorclass=MySQLdb.cursors.DictCursor)
+		self.cur = self.con.cursor()
 
     def _date(self):
         return str(datetime.now()).split(" ")[0]

@@ -201,13 +201,6 @@ export default function QuestionReducer(state={
                 error: action.payload
             }
         }
-	case "NEED_IMPROVEMENT_OPEN_CLICK": {
-            return {
-                ...state,
-                needImp: !state.needImp,
-                impPostId: action.payload
-            }
-        }
     };
     return state;
 }

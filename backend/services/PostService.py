@@ -1,4 +1,5 @@
 from datetime import *
+import time
 from config import config
 from config import sql
 from ForumService import Forum
@@ -9,6 +10,7 @@ import subprocess
 from extract_variables import *
 import numpy as np
 from sklearn.externals import joblib
+import multiprocessing as mp
 
 telegram = Telegram()
 
@@ -349,6 +351,7 @@ class Post(Forum):
 	return 2
     
     def _thoughtfulness_score(self, content, q_a):
+	start_time = time.time()
         self.v1 = average_number_of_characters_per_word(content)
         self.v2 = average_number_of_words_per_sentence(content)
         self.v3 = number_of_words(content)
@@ -359,13 +362,15 @@ class Post(Forum):
         self.v8 = average_pronouns_phrases_per_sentence(content)
         self.v9 = number_of_links(content)
         self.v10 = type_of_question(content)
-        self.v11 = average_number_of_subordinate_clauses_per_sentence(content)
+        self.v11 = 1
         v12 = q_a
+	end_time = time.time()
+	print end_time-start_time
         X = np.column_stack([self.v1,self.v2,self.v3,self.v4,self.v5,self.v6,self.v7,self.v8,self.v9,self.v10,self.v11,v12])
         filename = "/home/jeanc/rfr_model.sav"
         rfr = joblib.load(filename)
         mark = rfr.predict(X)[0]
-        return mark
+        return round(mark,2)
             
     def _qacoin(self, content, q_a, avatar_id):
         qaf = self._get_ranking_percentile(avatar_id)

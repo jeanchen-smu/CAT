@@ -140,6 +140,30 @@ class Telegram(Forum):
 	    except:
 		continue
 
+    def bot_push_message(self, chat_id, question_id, title, content, answer_id, qa_coins=None, timelimit=None):
+        self._init_con()
+        self.cur.execute(sql.botGetChatId)
+        user_list = self.cur.fetchall()
+        self._close()
+	post_user_name = ''
+        for user in user_list:
+	    if str(user['avatar_id']) == str(chat_id):
+		post_user_name = user['avatar_name']
+	for user in user_list:
+	    try:
+		self._bot_message(
+		    user['chat_id'],
+		    post_user_name,
+		    question_id,
+		    title,
+		    content,
+		    answer_id,
+		    qa_coins,
+		    timelimit 
+		)
+	    except:
+		continue
+
     def tele_push_expert(self, avatar_id, question_id, title, content, expert):
         self._init_con()
         self.cur.execute(sql.teleGetAvatarId.format(avatar_id))
@@ -193,6 +217,8 @@ class Telegram(Forum):
         for user in user_list:
 	    if int(user['avatar_id']) == int(userId):
 		post_user_name = user['avatar_name']
+	if int(userId)<=5:
+		post_user_name = "Question Bot"
         for user in user_list:
             try:
                 self._bot_message(
@@ -378,13 +404,13 @@ class Telegram(Forum):
         self.v8 = average_pronouns_phrases_per_sentence(content)
         self.v9 = number_of_links(content)
         self.v10 = type_of_question(content)
-        self.v11 = average_number_of_subordinate_clauses_per_sentence(content)
+        self.v11 = 1
         v12 = q_a
         X = np.column_stack([self.v1,self.v2,self.v3,self.v4,self.v5,self.v6,self.v7,self.v8,self.v9,self.v10,self.v11,v12])
         filename = "/home/jeanc/rfr_model.sav"
         rfr = joblib.load(filename)
         mark = rfr.predict(X)[0]
-        return mark
+        return round(mark,2)
             
     def _qacoin(self, content, q_a, avatar_id):
         qaf = self._get_ranking_percentile(avatar_id)
@@ -437,10 +463,20 @@ class Telegram(Forum):
         qaloss = self.cur.fetchall()
         self._close()
 	if len(qaloss)>0:
-	    text = text + '\n\nQA coins loss (hang for question but hasnot time limit yet):\n'
+	    text = text + '\n\nQA coins withheld:\n'
 	    for qa in qaloss:
 	        qacoin -= qa['qa_coin_bounty']
 	        text=text+'post id:'+str(qa['post_id'])+'\n'+'QA coin:-'+str(round(qa['qa_coin_bounty'],2))+'\n\n'
+	self._init_con()
+        self.cur.execute(sql.qaimprove_sql.format(
+            chat_id
+        ))
+        qaimprove = self.cur.fetchall()
+        self._close()
+	text = 'QA coin spent for need improvement:\n'
+        for qa in qaimprove:
+	    qacoin -= 1
+	    text=text+'post id:'+str(qa['post_id'])+'\n'+'QA coin:-1\n'+str(qa['timestamp'])+'\n\n'
 	text = text + '\n\nTotal QA coins:' + str(round(qacoin,2))
         self.bot.send_message(chat_id=chat_id, text=text)
 

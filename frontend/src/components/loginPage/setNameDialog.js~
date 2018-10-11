@@ -72,16 +72,11 @@ class SetNameDialog extends React.Component {
                     name="SetTGField"
                     ref="SetTGField"
                     hintText="Telegram Account"
-                    floatingLabelText="Telegram Account"
+                    floatingLabelText="Telegram Account(e.g. @Jeanchen2017, please enter Jeanchen2017)"
                     value={this.props.telegram_account}
                     onChange={()=>
                     this.props.updateTelegram(this.refs.SetTGField.getValue())}
                 />
-                <br />
-                <div style={this.styles.waringText}>
-                    * e.g. @Jeanchen2017, please enter Jeanchen2017
-                </div>
-                <br />
             </Dialog>
         )
     }

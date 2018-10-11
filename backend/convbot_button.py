@@ -756,7 +756,7 @@ dp.add_handler(re_handler)
 # log all errors
 dp.add_error_handler(error)
 # Start the Bot
-updater.start_polling()
+updater.start_polling(timeout=604800)
 # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
 # SIGTERM or SIGABRT. This should be used most of the time, since
 # start_polling() is non-blocking and will stop the bot gracefully.

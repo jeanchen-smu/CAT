@@ -381,7 +381,7 @@ def look_for_reply(bot, update, user_data):
 	    return ConversationHandler.END
     else:
         bot.send_message(chat_id = update.message.chat_id, 
-             text = "Please quote and reply to a question or use the commands below.\n\nCommands:\nNew Post: /newpost \nShow A Series Of Posts: /showall \nAccount Verification: /verify")
+             text = "Please quote and reply to a question or use the commands below.\n\nCommands:\nNew Post: /newpost \nShow A Series Of Posts: /showall \nAccount Verification: /verify \nShow history for QA coins: /QAhistory \nShow history for Thoughtfulness Score: /Thistory")
 	return ConversationHandler.END
 
 def reply_button(bot, update, user_data):
@@ -756,7 +756,7 @@ dp.add_handler(re_handler)
 # log all errors
 dp.add_error_handler(error)
 # Start the Bot
-updater.start_polling()
+updater.start_polling(timeout=3600)
 # Run the bot until the you presses Ctrl-C or the process receives SIGINT,
 # SIGTERM or SIGABRT. This should be used most of the time, since
 # start_polling() is non-blocking and will stop the bot gracefully.

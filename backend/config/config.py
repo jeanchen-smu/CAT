@@ -15,3 +15,7 @@ file_name = "tag_dataset.csv"
 encoding = "ISO-8859-1"
 
 bot_token = '307726211:AAGwbZh2nQ93i3Tf8jUoE9Ag51WCercXe5c'
+
+tag_x = "tag_x.csv"
+tag_y = "tag_y.csv"
+tag_model = "tag_model"

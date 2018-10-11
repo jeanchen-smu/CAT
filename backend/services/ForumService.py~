@@ -7,8 +7,7 @@ import MySQLdb.cursors
 
 class Forum:
     def __init__(self):
-	try:
-            self.con = MySQLdb.connect(host=config.db_host,   
+        self.con = MySQLdb.connect(host=config.db_host,   
                                         port=config.db_port,
                                         user=config.db_username,         
                                         passwd=config.db_password,  

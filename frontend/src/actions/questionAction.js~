@@ -201,13 +201,3 @@ export function VoteClick(access_token, vote){
             })
     }
 }
-
-export function NeedImprovementOpenClick(post_id=0){
-    return {
-        type: "NEED_IMPROVEMENT_OPEN_CLICK",
-        payload: post_id
-    }}
-
-
-
-

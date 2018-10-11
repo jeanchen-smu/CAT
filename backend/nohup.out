@@ -1,0 +1,121 @@
+::ffff:127.0.0.1 - - [2018-10-08 21:17:26] "POST /login HTTP/1.0" 200 634 0.007054
+::ffff:127.0.0.1 - - [2018-10-08 21:17:27] "POST /stat HTTP/1.0" 200 506 0.040085
+::ffff:127.0.0.1 - - [2018-10-08 21:17:27] "POST /posts HTTP/1.0" 200 542 0.031113
+2018-10-09 09:16:38,354 - telegram.ext.updater - ERROR - Error while getting Updates: Bad Gateway
+2018-10-09 09:16:38,381 - __main__ - WARNING - Update "None" caused error "Bad Gateway"
+2018-10-09 09:16:39,543 - telegram.ext.updater - ERROR - Error while getting Updates: Bad Gateway
+2018-10-09 09:16:39,546 - __main__ - WARNING - Update "None" caused error "Bad Gateway"
+2018-10-09 09:16:40,732 - telegram.ext.updater - ERROR - Error while getting Updates: Bad Gateway
+2018-10-09 09:16:40,760 - __main__ - WARNING - Update "None" caused error "Bad Gateway"
+2018-10-09 09:16:41,921 - telegram.ext.updater - ERROR - Error while getting Updates: Bad Gateway
+2018-10-09 09:16:41,924 - __main__ - WARNING - Update "None" caused error "Bad Gateway"
+2018-10-09 09:18:43,111 - telegram.ext.updater - ERROR - Error while getting Updates: Gateway Timeout (504)
+2018-10-09 09:18:43,116 - __main__ - WARNING - Update "None" caused error "Gateway Timeout (504)"
+::ffff:127.0.0.1 - - [2018-10-09 10:46:53] "POST /login HTTP/1.0" 200 634 0.006282
+::ffff:127.0.0.1 - - [2018-10-09 10:46:54] "POST /stat HTTP/1.0" 200 506 0.039244
+::ffff:127.0.0.1 - - [2018-10-09 10:46:54] "POST /posts HTTP/1.0" 200 542 0.031175
+::ffff:127.0.0.1 - - [2018-10-09 10:47:09] "POST /getthoughtfulness HTTP/1.0" 200 175 1.703861
+::ffff:127.0.0.1 - - [2018-10-09 10:47:13] "POST /setpost HTTP/1.0" 200 746 2.579883
+test test for vnc web
+::ffff:127.0.0.1 - - [2018-10-09 11:28:56] "POST /login HTTP/1.0" 200 625 0.008533
+::ffff:127.0.0.1 - - [2018-10-09 11:28:57] "POST /stat HTTP/1.0" 200 3264 0.043645
+::ffff:127.0.0.1 - - [2018-10-09 11:28:58] "POST /posts HTTP/1.0" 200 15382 0.365043
+::ffff:127.0.0.1 - - [2018-10-09 11:28:59] "POST /stat HTTP/1.0" 200 3264 0.042056
+::ffff:127.0.0.1 - - [2018-10-09 11:29:23] "POST /question HTTP/1.0" 200 6569 0.021175
+::ffff:127.0.0.1 - - [2018-10-09 11:29:32] "POST /posts HTTP/1.0" 200 15382 0.367011
+::ffff:127.0.0.1 - - [2018-10-09 11:29:33] "POST /question HTTP/1.0" 200 2659 0.020212
+::ffff:127.0.0.1 - - [2018-10-09 11:32:44] "POST /posts HTTP/1.0" 200 15382 0.364890
+::ffff:127.0.0.1 - - [2018-10-09 11:32:46] "POST /question HTTP/1.0" 200 3441 0.021448
+::ffff:127.0.0.1 - - [2018-10-09 11:32:52] "POST /posts HTTP/1.0" 200 15382 0.364420
+::ffff:127.0.0.1 - - [2018-10-09 11:32:54] "POST /question HTTP/1.0" 200 2659 0.019867
+::ffff:127.0.0.1 - - [2018-10-09 11:33:00] "POST /posts HTTP/1.0" 200 15382 0.364126
+::ffff:127.0.0.1 - - [2018-10-09 11:33:03] "POST /question HTTP/1.0" 200 2772 0.020656
+::ffff:127.0.0.1 - - [2018-10-09 11:41:41] "POST /getthoughtfulness HTTP/1.0" 200 175 1.389291
+::ffff:127.0.0.1 - - [2018-10-09 11:47:22] "POST /getnewts HTTP/1.0" 401 170 0.004212
+::ffff:127.0.0.1 - - [2018-10-09 11:47:43] "POST /login HTTP/1.0" 200 625 0.007636
+::ffff:127.0.0.1 - - [2018-10-09 11:47:44] "POST /stat HTTP/1.0" 200 3264 0.042437
+::ffff:127.0.0.1 - - [2018-10-09 11:47:44] "POST /posts HTTP/1.0" 200 15382 0.364160
+::ffff:127.0.0.1 - - [2018-10-09 11:47:49] "POST /question HTTP/1.0" 200 2772 0.020310
+::ffff:127.0.0.1 - - [2018-10-09 11:48:08] "POST /getthoughtfulness HTTP/1.0" 200 175 1.451915
+::ffff:127.0.0.1 - - [2018-10-09 11:48:15] "POST /setanswer HTTP/1.0" 200 4381 3.140440
+no title Hello Question Bot, in order to compute the duration between a specified start time (A) to an end time (B) in seconds, you will first have to key in the start time (A) and end time (B) in time format either "hh:mm:ss" or "mm:ss". Subsequently, there are a few methods to perform the calculation. One of the methods is to use end time (B) subtract start time (A) and change the format of the difference into "Custom" and "ss". This will show the time difference in seconds. Another method is to use (end time (B) - start time (A))*86400 where 86400 represents the number of seconds in an entire day. Some other methods also include using the SECOND function. However, the second function ignores the hour and mins and requires the start and end time to be recorded in seconds. Hence, the second function may not accurately reflect the minute or hour changes in seconds and there will be an additional step needed to separate its hours, minutes, and seconds. If the recording of start and end time has already seperated the hours, minutes, and seconds, the TIME function can also be considered to reflect the possible changes in the hours and minutes too. The inputs for TIME function is Hour(), Minute(), Second(). Hope this is helpful, cheers!
+
+web
+::ffff:127.0.0.1 - - [2018-10-09 11:51:51] "POST /getthoughtfulness HTTP/1.0" 200 175 1.426754
+::ffff:127.0.0.1 - - [2018-10-09 11:51:56] "POST /setanswer HTTP/1.0" 200 6656 2.581575
+no title Hello 123321, I think the equation that should be (End time B - Start time A)*86400 instead because the end time is always longer than the start time. I have also suggested to key in the start time (A) and end time (B) in time format either "hh:mm:ss" or "mm:ss". Subsequently, we can use end time (B) subtract start time (A) and change the format of the difference into "Custom" and "ss". This will show the time difference in seconds. As the Second() function ignores the difference in hours and minutes, if the event is recorded in hours and minutes, we can also use the time function as well. If the recording of start and end time has already seperated the hours, minutes, and seconds, the TIME function can also be considered to reflect the possible changes in the hours and minutes too. The inputs for TIME function is Hour(), Minute(), Second(). Hope this is helpful, cheers! web
+::ffff:127.0.0.1 - - [2018-10-09 11:57:19] "POST /getthoughtfulness HTTP/1.0" 200 175 1.178687
+::ffff:127.0.0.1 - - [2018-10-09 11:57:24] "POST /setanswer HTTP/1.0" 200 8599 2.311093
+::ffff:127.0.0.1 - - [2018-10-09 11:57:27] "POST /posts HTTP/1.0" 200 15382 0.368853
+no title Hello xiaolongbao, I tried the second function and found out that it only works if the inputs are in seconds. I have tested and found out that if the recording of start and end time has already seperated the hours, minutes, and seconds, the TIME function can be used to reflect the possible changes in the hours and minutes too. The inputs for TIME function is Hour(), Minute(), Second(). To find the difference, we can use TIME(HOUR(B), MINUTE(B),SECOND(B)) - TIME(HOUR(A), MINUTE(A),SECOND(A)) Subsequently, we can convert the difference into seconds by changing its format or multiplying it by 86400 which is the total number of seconds in a day. Hope this helps to give more possible ways of finding time difference! web
+::ffff:127.0.0.1 - - [2018-10-09 11:57:55] "POST /question HTTP/1.0" 200 2231 0.020834
+::ffff:127.0.0.1 - - [2018-10-09 11:58:54] "POST /stat HTTP/1.0" 200 3264 0.043733
+::ffff:127.0.0.1 - - [2018-10-09 12:02:27] "POST /posts HTTP/1.0" 200 15382 0.369208
+::ffff:127.0.0.1 - - [2018-10-09 12:05:17] "POST /question HTTP/1.0" 401 170 0.005524
+::ffff:127.0.0.1 - - [2018-10-09 12:05:20] "POST /question HTTP/1.0" 401 170 0.004407
+::ffff:127.0.0.1 - - [2018-10-09 12:05:23] "POST /question HTTP/1.0" 401 170 0.004395
+::ffff:127.0.0.1 - - [2018-10-09 12:05:29] "POST /login HTTP/1.0" 200 625 0.008233
+::ffff:127.0.0.1 - - [2018-10-09 12:05:29] "POST /stat HTTP/1.0" 200 3264 0.043399
+::ffff:127.0.0.1 - - [2018-10-09 12:05:30] "POST /posts HTTP/1.0" 200 15382 0.367570
+::ffff:127.0.0.1 - - [2018-10-09 12:05:33] "POST /question HTTP/1.0" 200 3744 0.021012
+::ffff:127.0.0.1 - - [2018-10-09 12:05:37] "POST /posts HTTP/1.0" 200 15382 0.367178
+::ffff:127.0.0.1 - - [2018-10-09 12:05:39] "POST /question HTTP/1.0" 200 2683 0.021045
+::ffff:127.0.0.1 - - [2018-10-09 12:34:09] "POST /login HTTP/1.0" 200 626 0.006325
+::ffff:127.0.0.1 - - [2018-10-09 12:34:09] "POST /stat HTTP/1.0" 200 4275 0.042231
+::ffff:127.0.0.1 - - [2018-10-09 12:34:10] "POST /posts HTTP/1.0" 200 22467 0.526507
+::ffff:127.0.0.1 - - [2018-10-09 12:34:14] "POST /question HTTP/1.0" 200 1033 0.018355
+::ffff:127.0.0.1 - - [2018-10-09 12:34:15] "POST /posts HTTP/1.0" 200 22467 0.543365
+::ffff:127.0.0.1 - - [2018-10-09 12:38:34] "POST /getthoughtfulness HTTP/1.0" 200 175 1.245149
+::ffff:127.0.0.1 - - [2018-10-09 12:38:42] "POST /setpost HTTP/1.0" 200 22694 2.904049
+::ffff:127.0.0.1 - - [2018-10-09 12:39:03] "POST /login HTTP/1.0" 200 626 0.007170
+::ffff:127.0.0.1 - - [2018-10-09 12:39:04] "POST /stat HTTP/1.0" 200 4275 0.042621
+::ffff:127.0.0.1 - - [2018-10-09 12:39:04] "POST /posts HTTP/1.0" 200 22694 0.531483
+Comparing a Text and Number  Hi guys, 
+
+I was just curious, what happens when you compare a text and number in a function. For example, when you do MIN("apple", 5") the result is 5. Or, when you are using COUNTIF(), the text is not counted. Hence, when comparing a text and number, what value does excel assign to the 'text'. Is it 0 or null or skips it?  web
+::ffff:127.0.0.1 - - [2018-10-09 12:39:41] "POST /question HTTP/1.0" 200 1210 0.019192
+::ffff:127.0.0.1 - - [2018-10-09 12:39:44] "POST /posts HTTP/1.0" 200 22694 0.534241
+::ffff:127.0.0.1 - - [2018-10-09 12:39:44] "POST /question HTTP/1.0" 200 1731 0.017887
+::ffff:127.0.0.1 - - [2018-10-09 12:39:51] "POST /posts HTTP/1.0" 200 22694 0.533805
+::ffff:127.0.0.1 - - [2018-10-09 12:39:57] "POST /question HTTP/1.0" 200 1402 0.018444
+::ffff:127.0.0.1 - - [2018-10-09 12:40:24] "POST /posts HTTP/1.0" 200 22694 0.533417
+::ffff:127.0.0.1 - - [2018-10-09 12:41:59] "POST /stat HTTP/1.0" 200 4275 0.042089
+::ffff:127.0.0.1 - - [2018-10-09 12:42:04] "POST /stat HTTP/1.0" 200 4275 0.042752
+::ffff:127.0.0.1 - - [2018-10-09 12:44:30] "POST /question HTTP/1.0" 200 1735 0.019131
+2018-10-09 12:49:32,835 - gensim.utils - INFO - loading Doc2Vec object from tag_model
+2018-10-09 12:49:32,844 - gensim.utils - INFO - loading trainables recursively from tag_model.trainables.* with mmap=None
+2018-10-09 12:49:32,844 - gensim.utils - INFO - loading docvecs recursively from tag_model.docvecs.* with mmap=None
+2018-10-09 12:49:32,844 - gensim.utils - INFO - loading vocabulary recursively from tag_model.vocabulary.* with mmap=None
+2018-10-09 12:49:32,844 - gensim.utils - INFO - loading wv recursively from tag_model.wv.* with mmap=None
+2018-10-09 12:49:32,844 - gensim.utils - INFO - loaded tag_model
+no title For use of functions such as min and maximum, excel requires an input of numerical values. However if value are computed from count if, max function can not find the highest number. For count if, the text should be counted if it is keyed in correctly eg COUNTIF(a1:a10, “Apple”) will count the number of times those range of cells contain apples. Always remember to put punctuation marks before and after any text string. Hope this answers your question somewhat? tele
+::ffff:127.0.0.1 - - [2018-10-09 12:50:52] "POST /login HTTP/1.0" 200 626 0.006474
+::ffff:127.0.0.1 - - [2018-10-09 12:50:52] "POST /stat HTTP/1.0" 200 4275 0.042489
+::ffff:127.0.0.1 - - [2018-10-09 12:50:53] "POST /posts HTTP/1.0" 200 22694 0.534351
+::ffff:127.0.0.1 - - [2018-10-09 12:50:56] "POST /question HTTP/1.0" 200 2122 0.019274
+::ffff:127.0.0.1 - - [2018-10-09 12:50:56] "POST /get_tags HTTP/1.0" 200 129 0.009098
+::ffff:127.0.0.1 - - [2018-10-09 12:55:49] "POST /getthoughtfulness HTTP/1.0" 200 175 1.379322
+::ffff:127.0.0.1 - - [2018-10-09 12:55:56] "POST /setanswer HTTP/1.0" 200 3645 3.768208
+no title Hi D, 
+
+Thanks for the answer! I think I am trying to understand what value excel assigns to texts when comparing text and numbers. I tried searching online but I couldn't find :/
+
+For example if this is your excel table.
+
+         A        
+1  apple
+2      5
+3      3
+
+If you use, MIN(A1, A2), you get 5. Hence, is it that A1 (apple), is equal to 0 or null for this function? Or is it that the function doesn't include text strings? And how does this apply to other functions! If that makes sense! web
+2018-10-09 13:01:17,294 - gensim.utils - INFO - loading Doc2Vec object from tag_model
+2018-10-09 13:01:17,302 - gensim.utils - INFO - loading trainables recursively from tag_model.trainables.* with mmap=None
+2018-10-09 13:01:17,303 - gensim.utils - INFO - loading docvecs recursively from tag_model.docvecs.* with mmap=None
+2018-10-09 13:01:17,303 - gensim.utils - INFO - loading vocabulary recursively from tag_model.vocabulary.* with mmap=None
+2018-10-09 13:01:17,303 - gensim.utils - INFO - loading wv recursively from tag_model.wv.* with mmap=None
+2018-10-09 13:01:17,303 - gensim.utils - INFO - loaded tag_model
+no title When you compare a text with a number, it seems that excel treats text to be always bigger than number. I tested with the IF function (IF(text>number, TRUE, FALSE)) and the function returns true, despite variations in the length/content of the text or the value of the number. The IF function always return false when the test is number>text. I am not sure why is this the case, but maybe you can take note that text > number. tele
+['use', u'function', 'min', 'maximum', 'excel', u'requir', 'input', u'numer', u'valu', u'howev', u'valu', u'comput', 'count', 'max', 'function', 'find', 'highest', 'number', 'count', 'text', u'count', u'key', u'correctli', 'eg', 'countifaa', u'appl', 'count', 'number', u'time', u'rang', u'cell', 'contain', u'appl', u'alway', u'rememb', 'put', u'punctuat', u'mark', 'text', 'string', 'hope', u'answer', 'question', 'somewhat']
+[96, 187, 416]
+[u'compar', 'text', 'number', u'seem', 'excel', u'treat', 'text', u'alway', 'bigger', 'number', u'test', 'function', u'iftextnumb', 'true', u'fals', 'function', u'return', 'true', u'despit', u'variat', u'lengthcont', 'text', u'valu', 'number', 'function', u'alway', 'return', u'fals', 'test', 'numbertext', 'sure', 'case', u'mayb', 'take', 'note', 'text', '', 'number']
+[240, 271, 298]

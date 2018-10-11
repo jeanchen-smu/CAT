@@ -1,7 +1,7 @@
 db_username = "jeanchen"
 db_password = "LARCdata9696"
 db_host = "10.0.106.72"
-db_port = "3307"
+db_port = 3307
 db_schema = "jeanchen"
 
 tag_association = 0.1
@@ -15,3 +15,6 @@ file_name = "tag_dataset.csv"
 encoding = "ISO-8859-1"
 
 bot_token = '307726211:AAGwbZh2nQ93i3Tf8jUoE9Ag51WCercXe5c'
+
+tag_x = "tag_x.csv"
+tag_y = "tag_y.csv"
