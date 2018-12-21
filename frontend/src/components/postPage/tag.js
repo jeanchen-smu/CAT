@@ -42,7 +42,7 @@ class Tag extends React.Component {
             <div style={this.styles.wrapper}>
                 {this.props.tags.map(this.renderChip, this)}
                 {this.props.isUser?<AddTag />:null}
-                
+
             </div>
         );
     }

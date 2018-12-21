@@ -1,12 +1,12 @@
 ###Avatar###
-getStat_sql = """SELECT (ifnull(qa_gain,0)-ifnull(qa_lost, 0)+ifnull(s3.qacoin, 0)-ifnull(s4.qacoin, 0)-ifnull(s5.vote_count, 0)) AS qacoins, section_id, username, thoughfulness, s0.avatar_id FROM
-((SELECT p.avatar_id, a.avatar_name AS username, IFNULL(SUM(qa_coin_basic),0) AS qa_gain, section_id,
-IFNULL(SUM(thoughtfulness_score),0) AS thoughfulness FROM avatar a, post p WHERE a.avatar_id = p.avatar_id and section_id=(select section_id from avatar where avatar_id={}) GROUP BY p.avatar_id) s0
+getStat_sql = """SELECT DISTINCT (ifnull(qa_gain,0)-ifnull(qa_lost, 0)+ifnull(s3.qacoin, 0)-ifnull(s4.qacoin, 0)-ifnull(s5.vote_count, 0)) AS qacoins, section_id, username, thoughfulness, s0.avatar_id FROM
+((SELECT p.avatar_id, a.avatar_name AS username, IFNULL(SUM(qa_coin_basic),0) AS qa_gain, a.section_id as section_id,
+IFNULL(SUM(thoughtfulness_score),0) AS thoughfulness FROM avatar a, post p WHERE a.avatar_id = p.avatar_id and a.section_id='{}' GROUP BY p.avatar_id) s0
 LEFT JOIN (SELECT avatar_id, IFNULL(SUM(qa_coin_bounty),0) AS qa_lost FROM post po WHERE time_limit_qa>NOW() GROUP BY avatar_id) s1
-on s0.avatar_id = s1.avatar_id) left join (select * from (select p.post_id as post_id, p.avatar_id as giver_id, po.avatar_id as receiver_id, po.post_id as answer_id, p.qa_coin_bounty as qacoin 
+on s0.avatar_id = s1.avatar_id) left join (select * from (select p.post_id as post_id, p.avatar_id as giver_id, po.avatar_id as receiver_id, po.post_id as answer_id, p.qa_coin_bounty as qacoin
 from post p join post po on p.post_id = po.question_id where p.time_limit_qa<=NOW() and p.qa_coin_bounty>0 and po.thoughtfulness_score>=2
 and po.timestamp < p.time_limit_qa order by post_id, po.thoughtfulness_score desc) x group by post_id) s3 on s0.avatar_id = s3.receiver_id
-left join (select * from (select p.post_id as post_id, p.avatar_id as giver_id, po.avatar_id as receiver_id, po.post_id as answer_id, p.qa_coin_bounty as qacoin 
+left join (select * from (select p.post_id as post_id, p.avatar_id as giver_id, po.avatar_id as receiver_id, po.post_id as answer_id, p.qa_coin_bounty as qacoin
 from post p join post po on p.post_id = po.question_id where p.time_limit_qa<=NOW() and p.qa_coin_bounty>0 and po.thoughtfulness_score>=2
 and po.timestamp < p.time_limit_qa order by post_id, po.thoughtfulness_score desc) x group by post_id) s4 on s0.avatar_id = s4.giver_id
 left join (SELECT avatar_id, count(vote) as vote_count FROM vote where vote = 2 group by avatar_id) s5 on s0.avatar_id = s5.avatar_id
@@ -45,11 +45,11 @@ changeIcon_sql = "UPDATE avatar SET icon = %s WHERE avatar_id = %s"
 
 
 ###Post###
-newPost_sql = """INSERT INTO post (avatar_id, post_subject, 
-                post_content, level, is_question, is_bot, `timestamp`, 
+newPost_sql = """INSERT INTO post (avatar_id, post_subject,
+                post_content, level, is_question, is_bot, `timestamp`,
                 is_qa_bountiful, time_limit_qa, time_limit_bot, qa_coin_basic,
-                qa_coin_bounty, thoughtfulness_score, previous_id)
-                VALUES ({}, '{}', '{}', 1, 1, {}, '{}', {}, '{}', '{}', {}, {}, {}, {})"""
+                qa_coin_bounty, thoughtfulness_score, previous_id, section_id)
+                VALUES ({}, '{}', '{}', 1, 1, {}, '{}', {}, '{}', '{}', {}, {}, {}, {}, '{}')"""
 
 replyToPost_select_sql = "SELECT level FROM post WHERE post_id = %s"
 
@@ -58,14 +58,14 @@ replyToPost_insert_sql = """INSERT INTO post (avatar_id, post_content, level, is
                             thoughtfulness_score, parent_id, previous_id)
                             VALUES ({}, '{}', {}, 0, {}, '{}', {}, {}, {}, {}, {})"""
 
-getPosts_sql = """SELECT post_id as 'key', post_subject as subject, 
-                qa_coin_bounty as qacoins, timestamp as date, 
+getPosts_sql = """SELECT post_id as 'key', post_subject as subject,
+                qa_coin_bounty as qacoins, timestamp as date,
                 (select count(*) from post	where question_id = p.post_id) as commentCounts,
-                (select count(*) from post where (isnull(reviewed) or reviewed=0) and 
+                (select count(*) from post where (isnull(reviewed) or reviewed=0) and
                 (post_id=p.post_id or question_id=p.post_id)) as reviewCounts,
-                avatar_name as username FROM post p, avatar a 
-                WHERE is_question = 1 and p.avatar_id = a.avatar_id and 
-                (section_id=(select section_id from avatar where avatar_id={}) or section_id in (select section from a_section where avatar_id={}) or section_id="bot")
+                avatar_name as username FROM post p, avatar a
+                WHERE is_question = 1 and p.avatar_id = a.avatar_id and
+                p.section_id='{}'
                 ORDER BY `timestamp` DESC"""
 
 getPost_sql = """SELECT post_id AS questionId, avatar_name AS username, p.avatar_id as userId,
@@ -88,14 +88,14 @@ getAnswer_sql = """SELECT post_id AS answerId, parent_id, level, avatar_name AS 
 
 updateReviewed_sql = """UPDATE post SET reviewed=1 WHERE post_id={}"""
 
-getPostsByTopic_sql = """SELECT post_id as 'key', post_subject as subject, 
-                qa_coin_bounty as qacoins, timestamp as date, 
+getPostsByTopic_sql = """SELECT post_id as 'key', post_subject as subject,
+                qa_coin_bounty as qacoins, timestamp as date,
                 (select count(*) from post	where question_id = p.post_id) as commentCounts,
-                (select count(*) from post where (isnull(reviewed) or reviewed=0) and 
+                (select count(*) from post where (isnull(reviewed) or reviewed=0) and
                 (post_id=p.post_id or question_id=p.post_id)) as reviewCounts,
-                avatar_name as username FROM post p, avatar a 
-                WHERE is_question = 1 and p.avatar_id = a.avatar_id and post_id in (select post_id from post_tag where tag_id ={} and association > {}) and 
-                (section_id=(select section_id from avatar where avatar_id={}) or section_id in (select section from a_section where avatar_id={}))
+                avatar_name as username FROM post p, avatar a
+                WHERE is_question = 1 and p.avatar_id = a.avatar_id and post_id in (select post_id from post_tag where tag_id ={} and association > {}) and
+                (a.section_id=(select section_id from avatar where avatar_id={}) or section_id in (select section as section_id from a_section where avatar_id={}))
                 ORDER BY `timestamp` DESC"""
 
 unreadPosts_parentid_sql = """SELECT post_id FROM post WHERE avatar_id = %s"""
@@ -176,12 +176,12 @@ getTopics_sql = "SELECT * FROM topic"
 
 getChatId_sql = """SELECT chat_id from avatar where """
 
-teleNewPost_sql = """INSERT INTO post (avatar_id, post_subject, 
-                post_content, level, is_question, is_bot, `timestamp`, 
+teleNewPost_sql = """INSERT INTO post (avatar_id, post_subject,
+                post_content, level, is_question, is_bot, `timestamp`,
                 is_qa_bountiful, time_limit_qa, time_limit_bot, qa_coin_basic,
-                qa_coin_bounty, thoughtfulness_score, previous_id)
-                VALUES ((SELECT avatar_id from avatar where chat_id={}), 
-                '{}', '{}', 1, 1, {}, '{}', {}, '{}', '{}', {}, {}, {}, {})"""
+                qa_coin_bounty, thoughtfulness_score, previous_id,section_id)
+                VALUES ((SELECT avatar_id from avatar where chat_id={}),
+                '{}', '{}', 1, 1, {}, '{}', {}, '{}', '{}', {}, {}, {}, {},(SELECT section_id from avatar where chat_id={}))"""
 
 botGetChatId = "select * from avatar"
 
@@ -224,14 +224,14 @@ teleReply2Reply_insert_sql = """INSERT INTO post (avatar_id, post_content, level
                             VALUES ((SELECT avatar_id from avatar where chat_id={}),
                              '{}', (select level from (select * from post) a where post_id={})+1, 0, {}, '{}', (select if(question_id=0, {}, question_id) from (select * from post) b where post_id={}), {}, {}, {})"""
 
-teleGetStat_sql = """SELECT (ifnull(qa_gain,0)-ifnull(qa_lost, 0)+ifnull(s3.qacoin, 0)-ifnull(s4.qacoin, 0)-ifnull(s5.vote_count, 0)) AS qacoins, section_id, username, thoughfulness, s0.chat_id, s0.avatar_id FROM
-((SELECT p.avatar_id, a.avatar_name AS username, IFNULL(SUM(qa_coin_basic),0) AS qa_gain, section_id,
-IFNULL(SUM(thoughtfulness_score),0) AS thoughfulness, chat_id FROM avatar a, post p WHERE a.avatar_id = p.avatar_id and section_id=(select section_id from avatar where chat_id='{}') GROUP BY p.avatar_id) s0
+teleGetStat_sql = """SELECT DISTINCT (ifnull(qa_gain,0)-ifnull(qa_lost, 0)+ifnull(s3.qacoin, 0)-ifnull(s4.qacoin, 0)-ifnull(s5.vote_count, 0)) AS qacoins, section_id, username, thoughfulness, s0.chat_id, s0.avatar_id FROM
+((SELECT p.avatar_id, a.avatar_name AS username, IFNULL(SUM(qa_coin_basic),0) AS qa_gain, a.section_id as section_id,
+IFNULL(SUM(thoughtfulness_score),0) AS thoughfulness, chat_id FROM avatar a, post p WHERE a.avatar_id = p.avatar_id and a.section_id=(select section_id from avatar where chat_id='{}') GROUP BY p.avatar_id) s0
 LEFT JOIN (SELECT avatar_id, IFNULL(SUM(qa_coin_bounty),0) AS qa_lost FROM post po WHERE time_limit_qa>NOW() GROUP BY avatar_id) s1
-on s0.avatar_id = s1.avatar_id) left join (select * from (select p.post_id as post_id, p.avatar_id as giver_id, po.avatar_id as receiver_id, po.post_id as answer_id, p.qa_coin_bounty as qacoin 
+on s0.avatar_id = s1.avatar_id) left join (select * from (select p.post_id as post_id, p.avatar_id as giver_id, po.avatar_id as receiver_id, po.post_id as answer_id, p.qa_coin_bounty as qacoin
 from post p join post po on p.post_id = po.question_id where p.time_limit_qa<=NOW() and p.qa_coin_bounty>0 and po.thoughtfulness_score>=2
 and po.timestamp < p.time_limit_qa order by post_id, po.thoughtfulness_score desc) x group by post_id) s3 on s0.avatar_id = s3.receiver_id
-left join (select * from (select p.post_id as post_id, p.avatar_id as giver_id, po.avatar_id as receiver_id, po.post_id as answer_id, p.qa_coin_bounty as qacoin 
+left join (select * from (select p.post_id as post_id, p.avatar_id as giver_id, po.avatar_id as receiver_id, po.post_id as answer_id, p.qa_coin_bounty as qacoin
 from post p join post po on p.post_id = po.question_id where p.time_limit_qa<=NOW() and p.qa_coin_bounty>0 and po.thoughtfulness_score>=2
 and po.timestamp < p.time_limit_qa order by post_id, po.thoughtfulness_score desc) x group by post_id) s4 on s0.avatar_id = s4.giver_id
 left join (SELECT avatar_id, count(vote) as vote_count FROM vote where vote = 2 group by avatar_id) s5 on s0.avatar_id = s5.avatar_id

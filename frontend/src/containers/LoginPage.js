@@ -145,7 +145,7 @@ class LoginPage extends React.Component {
                             <Divider/>
                             <div style={{...styles.buttonsDiv, marginTop: 50}}>
                             <GoogleLogin
-                                clientId="6749461762-p7ljlku3v0k1j42m4f2inj7htqfsbnfe.apps.googleusercontent.com"
+                                clientId="317059584734-2ue600vul5pkcade5d7436t8jmv2m7i0.apps.googleusercontent.com"
                                 buttonText="LOGIN"
                                 onSuccess={this.responseGoogle}
                                 onFailure={this.responseGoogle}

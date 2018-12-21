@@ -6,7 +6,9 @@ export default function LoginReducer(state={
         pwd_error_msg: ""
     },
     user: {
-        agreed: false
+        agreed: false,
+        userSections: [],
+        section_id: null
     },
     isNewUser: false,
     setName: false,
@@ -54,7 +56,7 @@ export default function LoginReducer(state={
         case "GET_LOGIN_SUCCEED": {
             sessionStorage.setItem("access_token", action.payload.access_token);
             sessionStorage.setItem("userId", action.payload.userId);
-            browserHistory.push("/cat/home");
+            browserHistory.push("/home");
             return {
                 ...state,
                 user: action.payload,
@@ -118,6 +120,15 @@ export default function LoginReducer(state={
                 user: {
                     ...state.user,
                     telegram_account: action.payload
+                }
+            }
+        }
+        case "UPDATE_SECTION": {
+            return {
+                ...state,
+                user: {
+                    ...state.user,
+                    section_id: action.payload
                 }
             }
         }

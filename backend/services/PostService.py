@@ -32,30 +32,34 @@ class Post(Forum):
         qacoins = post['qacoins']
         subject = post['subject']
         question = post['question']
+        section_id = post['section_id']
         is_qa_bountiful = 1 if qacoins>0 else 0
         time_limit_qa = post['dateTime']
         time_limit_bot = self._date()+" "+self._time()
         self.cur.execute(sql.newPost_sql.format(
             user_id,
             subject,
-            question, 
-            0, 
+            question,
+            0,
             self._date()+" "+self._time(),
-            is_qa_bountiful, 
-            time_limit_qa, 
+            is_qa_bountiful,
+            time_limit_qa,
             time_limit_bot,
             self._qacoin(question, 1, user_id),
             qacoins,
             self._thoughtfulness_score(question, 1),
-            post['previous_post_id']))
+            post['previous_post_id'],
+            section_id))
         self.con.commit()
         post_id = self.cur.lastrowid
         self._insert_tag_ass(post["question"], post_id)
         self._insert_thought_sim(post_id)
+        tags = self._get_tags(post_id)
         self._close()
         p = subprocess.Popen(["python telePushMsg.py -i '{}' -q '{}' -t '{}' -c '{}' -w web -o '{}' -l '{}'".format(
                 user_id, post_id, subject.replace("\\'", "\'\"\'\"\'"), question.replace("\\'", "\'\"\'\"\'"), qacoins, time_limit_qa)
             ], shell=True)
+        return post_id
 
 
     def replyToPost(self, post):
@@ -82,19 +86,10 @@ class Post(Forum):
             ], shell=True)
 
     def getPosts(self, filter):
-        self._init_con()
-        if 'topic_id' not in filter:
-            self.cur.execute(sql.getPosts_sql.format(filter['userId'], filter['userId']))
-        elif filter['topic_id'] == 0 and filter['section_id'] == 0:
-            self.cur.execute(sql.getPosts_sql.format(filter['userId'], filter['userId']))
-        elif filter['section_id'] == 0:
-            self.cur.execute(sql.getPostsByTopic_sql.format(filter['topic_id'], config.tag_association, filter['userId'], filter['userId']))
-        elif filter['topic_id'] == 0:
-            self.cur.execute(sql.getPostsBySection_sql.format(filter['section_id']))
-        else:
+        if 'topic_id' in filter and filter['topic_id'] !=0 :
             self.cur.execute(sql.getPostsByTopicSection_sql.format(filter['topic_id'], config.tag_association, filter['section_id']))
-            
-        
+        else:
+            self.cur.execute(sql.getPosts_sql.format(filter["section_id"]))
         values = self.cur.fetchall()
         for value in values:
             value['date'] = value['date'].strftime(config.date_format)
@@ -233,21 +228,23 @@ class Post(Forum):
     def delete_tag(self, post_tags):
         return self._update_tags(config.hide_tag_association, post_tags)
 
-    def _process_tag_sim(self, sim, post_id):
-        sim_strs = ["({}, {}, {})".format(i, post_id, j) for j, i in sim]
+    def _process_tag_sim(self,post_id):
+        self.cur.execute(sql.getALLTagIds_sql)
+        sim = self.cur.fetchall()
+        sim_strs = ["({}, {}, {})".format(i["tag_id"], post_id, 0) for i in sim]
         return " ,".join(sim_strs)
         
     def _insert_tag_ass(self, post, post_id):
         tag_service = Tag(post)
         tag_service.newTag()
         self.cur.execute(sql.newTag_sql.format(
-            self._process_tag_sim(tag_service.sim, post_id)
+            self._process_tag_sim(post_id)
         ))
         self.con.commit()
 
-    def _get_all_user_stat(self, avatar_id):
+    def _get_all_user_stat(self, section_id):
         self._init_con()
-        self.cur.execute(sql.getStat_sql.format(avatar_id, avatar_id))
+        self.cur.execute(sql.getStat_sql.format(section_id))
         users = list(self.cur.fetchall())
         self._close()
         ranking = 1
@@ -256,8 +253,8 @@ class Post(Forum):
             ranking += 1
         return users
         
-    def get_user_stat(self, avatar_id):
-        users = self._get_all_user_stat(avatar_id)
+    def get_user_stat(self, avatar_id, section_id):
+        users = self._get_all_user_stat(section_id)
         user_stat = {}
         ranking = []
         count = 0

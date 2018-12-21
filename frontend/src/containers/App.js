@@ -25,7 +25,9 @@ class App extends React.Component {
     if (this.props.nav.navOpen == false){
       this.props.getMyStats(
         sessionStorage.getItem("access_token"),
-        sessionStorage.getItem("userId"));
+        sessionStorage.getItem("userId"),
+	this.props.section_id	
+	);
     }
     this.props.navOpen();
   }
@@ -70,7 +72,8 @@ const mapStateToProps = (state) => {
   return {
 	  login: state.login.login,
     user: state.login.user,
-    nav: state.nav
+    nav: state.nav,
+ 	  section_id: state.login.user.section_id
   };
 };
 
@@ -82,8 +85,8 @@ const mapDispatchToProps = (dispatch) => {
         navReceiveProps: (bol) => {
           dispatch(NavReceiveProps(bol))
         },
-        getMyStats: (access_token, userId) => {
-          dispatch(GetMyStats(access_token, userId))
+        getMyStats: (access_token, userId, section_id) => {
+          dispatch(GetMyStats(access_token, userId, section_id))
         }
     }
 }

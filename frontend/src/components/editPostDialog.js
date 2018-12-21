@@ -6,16 +6,16 @@ import {DeleteQuestionOpen, DeleteQuestionClose} from './../actions/navAction';
 import Dialog from 'material-ui/Dialog';
 import TextField from "material-ui/TextField";
 import Paper from "material-ui/Paper";
-import {SetPost, 
-        UpdateNewPostContent, 
+import {UpdateNewPostContent,
         UpdateNewPostSubject,
         EditPostOpen,
         ClearNewPost,
         NewEditPostOpen,
         GetNewTS} from './../actions/forumAction';
 import {ResetNewPost} from "./../actions/newPostAction";
-import {SetAnswer,UpdateAnswer, ResetAnswer} from "../actions/questionAction";
+import {SetPost,SetAnswer,UpdateAnswer, ResetAnswer} from "../actions/questionAction";
 import {AnswerReplyOpen, AnswerReplyClose} from './../actions/navAction';
+import {DeleteTag} from './../actions/questionAction';
 
 class EditPostDialog extends React.Component {
     constructor() {
@@ -33,7 +33,7 @@ class EditPostDialog extends React.Component {
             }
         }
     }
-    
+
     answerObj(isNewPost) {
         return {
             questionId: this.props.questionId,
@@ -72,7 +72,8 @@ class EditPostDialog extends React.Component {
             userId: this.props.user.userId,
             dateTime: this.props.dateTime,
             edit: true,
-            previous_post_id: this.props.newPost.post_id
+            previous_post_id: this.props.newPost.post_id,
+            section_id: this.props.section_id
         }
     }
 
@@ -143,10 +144,10 @@ class EditPostDialog extends React.Component {
                         this.props.updateNewPostSubject(this.refs.newPostTitle.getValue())}
                     />}
                     </Paper>
-                    <Paper 
+                    <Paper
                         zDepth={1}
                         style={this.styles.contentPaper}>
-                    <TextField 
+                    <TextField
                         style={this.styles.textField}
                         name="content"
                         id="newPostContent"
@@ -190,7 +191,8 @@ const mapStateToProps = (state) => {
       user: state.login.user,
       answer: state.ques.answer,
       dateTime: state.newPost.dateTime,
-      qacoins: state.newPost.qacoins.value
+      qacoins: state.newPost.qacoins.value,
+      section_id: state.login.user.section_id
   };
 };
 
@@ -228,6 +230,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         getNewTs: (access_token, post) => {
             dispatch(GetNewTS(access_token, post))
+        },
+        deleteTag: (access_token, post) => {
+            dispatch(DeleteTag(access_token, post))
         }
     }
 }

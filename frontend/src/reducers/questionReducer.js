@@ -11,6 +11,7 @@ export default function QuestionReducer(state={
     newTags: null,
     fetched: false,
     fetching: false,
+    initTag: false,
     error: null
 }, action){
     switch(action.type){
@@ -206,6 +207,26 @@ export default function QuestionReducer(state={
                 ...state,
                 needImp: !state.needImp,
                 impPostId: action.payload
+            }
+        }
+	case "SET_POSTS_SUCCEED": {
+            return {
+                ...state,
+                post: {
+                    ...state.post,
+                    question: action.payload.question,
+                    answers: action.payload.answers
+                },
+                initTag: true,
+                fetched: true,
+                fetching: false,
+                error: null
+            }
+        }
+        case "INIT_TAG_OPEN_CLICK": {
+            return {
+                ...state,
+                initTag: !state.initTag
             }
         }
     };

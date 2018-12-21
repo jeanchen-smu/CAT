@@ -5,6 +5,7 @@ import QuestionCard from './questionCard';
 import globalStyles from '../../styles';
 import QuestionDelete from "./questionDelete";
 import QuestionThoughtfulness from "./questionThoughtfulness";
+import InitTag from "./initTag";
 
 const QuestionPaper = props => {
     return (
@@ -27,6 +28,7 @@ const QuestionPaper = props => {
             downvotes={props.question.downvotes}
             uservote={props.question.uservote}
           />
+	  <InitTag/>
       </Paper>
     )
 };

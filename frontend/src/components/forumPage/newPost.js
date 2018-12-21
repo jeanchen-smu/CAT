@@ -10,7 +10,8 @@ import moment from 'moment';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import {connect} from 'react-redux';
-import {SetPost, GetTS} from "./../../actions/forumAction";
+import {GetTS} from "./../../actions/forumAction";
+import {SetPost} from "./../../actions/questionAction";
 import {SetQaCoins, 
         SetDate, 
         SetDateTime,

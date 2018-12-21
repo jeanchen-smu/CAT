@@ -7,7 +7,7 @@ import NewPost from "./../components/forumPage/newPost";
 import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
 import {connect} from 'react-redux';
-import {SetPost, GetTopics, CloseSearch, UpdateTopic, GetPosts, GetSessions, UpdateSection} from "./../actions/forumAction";
+import {SetPost, GetTopics, CloseSearch, UpdateTopic, GetPosts} from "./../actions/forumAction";
 import {SetQaCoins, ResetQaCoins, SetDate, SetDateTime} from "./../actions/newPostAction";
 import moment from "moment";
 import SelectField from 'material-ui/SelectField';
@@ -55,15 +55,15 @@ class DashboardPage extends React.Component {
         );
     }
 
-    sessionMenuItem(session) {
-        return (
-            <MenuItem
-                key={session.section_id}
-                value={session.section_id}
-                primaryText={session.section_id}
-            />
-        )
-    }
+    // sessionMenuItem(session) {
+    //     return (
+    //         <MenuItem
+    //             key={session.section_id}
+    //             value={session.section_id}
+    //             primaryText={session.section_id}
+    //         />
+    //     )
+    // }
 
     handleTopicChange(event, index, value) {
         this.props.updateTopic({value}.value);
@@ -77,17 +77,17 @@ class DashboardPage extends React.Component {
         )
     }
 
-    handleSectionChange(event, index, value) {
-        this.props.updateSection({value}.value);
-        this.props.getPosts(
-            sessionStorage.getItem("access_token"),
-            {
-                topic_id: this.props.topic,
-                section_id: {value}.value,
-                userId: this.props.userId
-            }
-        )
-    }
+    // handleSectionChange(event, index, value) {
+    //     this.props.updateSection({value}.value);
+    //     this.props.getPosts(
+    //         sessionStorage.getItem("access_token"),
+    //         {
+    //             topic_id: this.props.topic,
+    //             section_id: {value}.value,
+    //             userId: this.props.userId
+    //         }
+    //     )
+    // }
 
     render() {
         return (
@@ -96,7 +96,7 @@ class DashboardPage extends React.Component {
                 <h3 style={globalStyles.title}>
                     Discussion
                     <div style={this.styles.newPostButton}>
-                    <RaisedButton 
+                    <RaisedButton
                         label="Search"
                         style={{marginRight:20}}
                         secondary={true}
@@ -111,11 +111,11 @@ class DashboardPage extends React.Component {
                             }
                         }}
                     />
-    
-                    <RaisedButton 
+
+                    <RaisedButton
                         label="New Post"
                         secondary={true}
-                        onClick={this.routeToNewPost.bind(this)}    
+                        onClick={this.routeToNewPost.bind(this)}
                     />
                     </div>
                 </h3>
@@ -136,22 +136,7 @@ class DashboardPage extends React.Component {
                             />
                             {this.props.topics.map(this.topicMenuItem, this)}
                         </SelectField>
-                        {
-                            this.props.isTeacher?
-                            <SelectField
-                                hintText="Search By Section"
-                                value={this.props.session}
-                                onChange={this.handleSectionChange.bind(this)}
-                            >
-                                <MenuItem
-                                    key={0}
-                                    value={0}
-                                    primaryText="NONE"
-                                />
-                                {this.props.sessions.map(this.sessionMenuItem, this)}
-                            </SelectField>:null
-                        }
-                        
+
                     </Paper>
                 </div>:null
                 }
@@ -201,18 +186,18 @@ const mapDispatchToProps = (dispatch) => {
     getTopics: (access_token) => {
         dispatch(GetTopics(access_token))
     },
-    getSessions: (access_token, userId) => {
-        dispatch(GetSessions(access_token, userId))
-    },
+    // getSessions: (access_token, userId) => {
+    //     dispatch(GetSessions(access_token, userId))
+    // },
     closeSearch: () => {
         dispatch(CloseSearch())
     },
     updateTopic: (topic) => {
         dispatch(UpdateTopic(topic))
     },
-    updateSection: (section) => {
-        dispatch(UpdateSection(section))
-    },
+    // updateSection: (section) => {
+    //     dispatch(UpdateSection(section))
+    // },
     getPosts: (access_token, filter) => {
         dispatch(GetPosts(access_token, filter))
     }

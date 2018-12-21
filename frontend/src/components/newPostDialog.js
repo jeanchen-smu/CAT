@@ -5,13 +5,12 @@ import {connect} from "react-redux";
 import {DeleteQuestionOpen, DeleteQuestionClose} from './../actions/navAction';
 import Dialog from 'material-ui/Dialog';
 import EditPostDialog from './editPostDialog';
-import {SetPost, 
-        UpdateNewPostContent, 
+import {UpdateNewPostContent,
         UpdateNewPostSubject,
         EditPostOpen,
         ClearNewPost} from './../actions/forumAction';
 import {ResetNewPost} from "./../actions/newPostAction";
-import {SetAnswer,UpdateAnswer, ResetAnswer} from "../actions/questionAction";
+import {SetPost, SetAnswer,UpdateAnswer, ResetAnswer} from "../actions/questionAction";
 import {AnswerReplyOpen, AnswerReplyClose} from './../actions/navAction';
 
 class NewPostDialog extends React.Component {
@@ -52,7 +51,8 @@ class NewPostDialog extends React.Component {
             userId: this.props.user.userId,
             dateTime: this.props.dateTime,
             edit: false,
-            previous_post_id: this.props.newPost.post_id
+            previous_post_id: this.props.newPost.post_id,
+            section_id: this.props.section_id
         }
     }
 
@@ -117,7 +117,8 @@ const mapStateToProps = (state) => {
       user: state.login.user,
       answer: state.ques.answer,
       dateTime: state.newPost.dateTime,
-      qacoins: state.newPost.qacoins.value
+      qacoins: state.newPost.qacoins.value,
+      section_id: state.login.user.section_id
   };
 };
 

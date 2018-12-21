@@ -35,7 +35,7 @@ class AddTag extends React.Component {
     componentDidMount(){
         const getTagObj = {
             method: "post",
-                url: "/cat/api/get_tags",
+                url: "/api/get_tags",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: "Bearer " + sessionStorage.getItem("access_token")
@@ -79,9 +79,9 @@ class AddTag extends React.Component {
                 );
                 this.props.addTagClose()}}
             />,
-        ];  
+        ];
         return (
-            <FloatingActionButton 
+            <FloatingActionButton
                 style={this.styles.addTagButton}
                 mini={true}
                 onClick={()=>this.props.addTagOpen()}

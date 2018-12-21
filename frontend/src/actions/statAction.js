@@ -1,22 +1,23 @@
 import axios from "axios";
 
-function getStatReqObj(access_token, userId){
+function getStatReqObj(access_token, userId, section_id){
     return {
         method: "post",
-        url: "/cat/api/stat",
+        url: "/api/stat",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token         
         }, 
         data: {
-            userId: userId
+            userId: userId,
+	    section_id: section_id
         }
     };
 }
 
-export function GetMyStats(access_token, userId){
+export function GetMyStats(access_token, userId, section_id){
     return function(dispatch){
-        axios(getStatReqObj(access_token, userId))
+        axios(getStatReqObj(access_token, userId, section_id))
             .then(response => {
                 dispatch ({type: "GET_MY_STATS_SUCCEED", payload: response.data})
             })

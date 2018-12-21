@@ -41,12 +41,13 @@ def login():
         except:
             is_teacher = True
         return jsonify(access_token=token,
-                         msg="Success", 
-                         is_teacher=is_teacher, 
+                         msg="Success",
+                         is_teacher=is_teacher,
                          userId=user_info[0]['avatar_id'],
                          section_id=user_info[0]['section_id'],
                          email=user_info[0]['email'],
                          username=user_info[0]['avatar_name'],
+                         userSections=post.get_sessions(user_info[0]['avatar_id']),
                          agreed=True if user_info[0]['agreed']=="1" else False ), 200
 
     return jsonify(access_token="", msg="Bad username or password"), 401
@@ -55,7 +56,8 @@ def login():
 @jwt_required
 def get_user_stat():
     user_id = request.json.get('userId')
-    data = post.get_user_stat(user_id)
+    section_id = request.json.get('section_id')
+    data = post.get_user_stat(user_id, section_id)
     return jsonify(data)
 
 @app.route('/posts', methods=['POST'])
@@ -82,14 +84,19 @@ def get_tags():
 @app.route('/setpost', methods=['POST'])
 @jwt_required
 def set_post():
+    print request.json
     post_detail = request.json.get('post')
+    filter = request.json.get('filter')
     post_detail['subject'] = process_string(post_detail['subject'])
     post_detail['question'] = process_string(post_detail['question'])
     if not post_detail['edit']:
         post.delete_abandoned_post(post_detail['previous_post_id'])
         post_detail['previous_post_id'] = "null"
-    post.newPost(post_detail)
-    return jsonify(post.getPosts({'userId': post_detail['userId']}))
+    post_id = post.newPost(post_detail)
+    user_id = post_detail["userId"]
+    data = post.get_post(user_id, post_id)
+    data['question']['isUser'] = (data['question']['userId']==user_id)
+    return jsonify(data)
 
 @app.route("/setanswer", methods=['POST'])
 @jwt_required
@@ -145,7 +152,7 @@ def get_thoughtfulness():
     if t_post['subject'] != None:
         t_post['subject'] = process_string(t_post['subject'])
     t_post['content'] = process_string(t_post['content'])
-    data = post.insert_abandoned_post(t_post)   
+    data = post.insert_abandoned_post(t_post)
     return jsonify(data)
 
 @app.route("/setusername", methods=['POST'])

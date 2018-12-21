@@ -20,19 +20,24 @@ const styles = {
 class Ranking extends React.Component {
 
     getShortForm(username){
-        var fields = username.split(" ");
-        var sf_username = fields[0][0].toUpperCase()
-        if (fields.length > 1){
-          sf_username = sf_username + fields[1][0].toUpperCase()
+        try{
+          var fields = username.split(" ");
+          var sf_username = fields[0][0].toUpperCase()
+          if (fields.length > 1){
+            sf_username = sf_username + fields[1][0].toUpperCase()
+          }
+          return sf_username
         }
-        return sf_username
+        catch(err){
+          return ""
+        }
     }
 
     renderRankingListItem(ranking) {
         return (
             <ListItem
               primaryText={ranking.username}
-              leftAvatar={<Avatar>{ranking.username?this.getShortForm(ranking.username):null}</Avatar>}
+              leftAvatar={<Avatar>{ranking.username?this.getShortForm(ranking.username):""}</Avatar>}
               rightAvatar={<Avatar backgroundColor={yellowA700}>{ranking.ranking}</Avatar>}
             />
         )

@@ -22,9 +22,13 @@ import FlatButton from 'material-ui/FlatButton';
 import PageDropDown from "./../components/forumPage/pageDropDown";
 
 class Forum extends React.Component {
-    
+
     componentDidMount(){
-        this.props.getPosts(sessionStorage.getItem("access_token"), {userId: sessionStorage.getItem("userId")})
+        this.props.getPosts(sessionStorage.getItem("access_token"),
+        {
+            userId: sessionStorage.getItem("userId"),
+            section_id: this.props.section_id?this.props.section_id:sessionStorage.getItem("default_section")
+        })
     }
 
     previousPageButton(previousPageObject) {
@@ -49,7 +53,7 @@ class Forum extends React.Component {
 
     setPageButton(pageObject) {
         return (
-            <FlatButton 
+            <FlatButton
                 style={pageObject.style}
                 label={pageObject.value}
                 disabled={pageObject.disabled}
@@ -61,7 +65,7 @@ class Forum extends React.Component {
 
     dotButton() {
         return (
-            <FlatButton 
+            <FlatButton
                 label="..."
                 style={{
                     padding:0
@@ -91,11 +95,11 @@ class Forum extends React.Component {
         if (totalPage>chunkSize*2+1 && currentPage>chunkSize+1){
                 a.push(this.dotButton());
         }
-        var startPage = Math.max(1, Math.min(currentPage-chunkSize, totalPage-chunkSize*2)); 
+        var startPage = Math.max(1, Math.min(currentPage-chunkSize, totalPage-chunkSize*2));
         for (var i=startPage; i<Math.min(startPage+9, totalPage+1); i++){
             pageView.push({
-                value: i, 
-                function: this.props.setPage, 
+                value: i,
+                function: this.props.setPage,
                 style:styles.pageButton,
                 disabled: i==this.props.currentPage
             })
@@ -108,14 +112,14 @@ class Forum extends React.Component {
             disabled: currentPage === totalPage,
             function: this.props.gotoNextPage
         }))
-        
+
         return a
     }
 
     render() {
         const styles = {
             pageDiv: {
-                display: 'flex', 
+                display: 'flex',
                 justifyContent: 'center'
             },
             textSpan: {
@@ -126,7 +130,7 @@ class Forum extends React.Component {
         return (
             <div>
                 <List>
-                    <PostItem 
+                    <PostItem
                         posts={this.props.posts[this.props.currentPage-1]}
                     />
                 <Divider />
@@ -149,7 +153,8 @@ const mapStateToProps = (state) => {
   return {
 	  posts: state.forum.posts,
       currentPage: state.forum.currentPage,
-      totalPage: state.forum.totalPage
+      totalPage: state.forum.totalPage,
+      section_id: state.login.user.section_id
   };
 };
 
@@ -167,7 +172,7 @@ const mapDispatchToProps = (dispatch) => {
     gotoNextPage: () => {
         dispatch(GotoNextPage())
     }
-    
+
   };
 };
 

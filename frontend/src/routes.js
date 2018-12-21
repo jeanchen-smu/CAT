@@ -14,16 +14,16 @@ function loggedIn() {
 function requireAuth(nextState, replace) {
     if (!loggedIn()) {
         replace({
-            pathname: "/cat/login"
+            pathname: "/login"
         });
     }
 }
 
 export default (
     <Route>
-        <Route path="/cat" component={LoginPage} />
-        <Route path="/cat/login" component={LoginPage} />
-        <Route path="/cat/home" component={App}>
+        <Route path="/" component={LoginPage} />
+        <Route path="/login" component={LoginPage} />
+        <Route path="/home" component={App}>
             <IndexRoute component={Dashboard} />
             <Route path="dashboard" component={Dashboard} />
             <Route path="post" component={PostPage}/>

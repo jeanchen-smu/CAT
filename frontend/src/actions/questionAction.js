@@ -1,14 +1,50 @@
 import axios from "axios";
 import { browserHistory } from 'react-router';
 
+function SetPostReqObj(access_token, filter, post){
+    return {
+        method: "post",
+        url: "/api/setpost",
+        headers:{
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + access_token,
+        },
+        data: {
+            filter: filter,
+            post: post
+        }
+    };
+}
+
+export function SetPost(access_token, filter, post){
+    return function(dispatch){
+        axios(SetPostReqObj(access_token, filter, post))
+            .then(response => {
+                dispatch ({type: "SET_POSTS_SUCCEED", payload: response.data})
+            })
+            .then(() => {
+                browserHistory.push("/home/post");
+            })
+            .catch(err => {
+                dispatch ({type: "SET_POSTS_FAIL", payload: err})
+            })
+    }
+}
+
+  export function InitTagOpenClick(){
+    return {
+        type: "INIT_TAG_OPEN_CLICK"
+    }
+}
+
 function GetQuestionReqObj(access_token, questionId, userId){
     return {
         method: "post",
-        url: "/cat/api/question",
+        url: "/api/question",
         headers:{
             "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,       
-        }, 
+            Authorization: "Bearer " + access_token,
+        },
         data: {
             questionId: questionId,
             userId: userId
@@ -23,7 +59,7 @@ export function GetQuestion(access_token, questionId, userId){
                 dispatch ({type: "GET_QUESTION_SUCCEED", payload: response.data})
             })
             .then(() => {
-                browserHistory.push("/cat/home/post");
+                browserHistory.push("/home/post");
             })
             .catch(err => {
                 dispatch ({type: "GET_QUESTION_FAIL", payload: err})
@@ -34,11 +70,11 @@ export function GetQuestion(access_token, questionId, userId){
 function SetAnswerReqObj(access_token, answer){
     return {
         method: "post",
-        url: "/cat/api/setanswer",
+        url: "/api/setanswer",
         headers:{
             "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,       
-        }, 
+            Authorization: "Bearer " + access_token,
+        },
         data: {
             answer: answer
         }
@@ -101,11 +137,11 @@ export function EndThoughtfulness(){
 function UpdateThoughtfulnessReqObj(access_token, post){
     return {
         method: "post",
-        url: "/cat/api/setthoughtfulness",
+        url: "/api/setthoughtfulness",
         headers:{
             "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,       
-        }, 
+            Authorization: "Bearer " + access_token,
+        },
         data: {
             post: post
         }
@@ -127,11 +163,11 @@ export function UpdateThoughtfulness(access_token, post){
 function AddNewTagReqObj(access_token, post){
     return {
         method: "post",
-        url: "/cat/api/addtag",
+        url: "/api/addtag",
         headers:{
             "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,       
-        }, 
+            Authorization: "Bearer " + access_token,
+        },
         data: {
             post: post
         }
@@ -153,11 +189,11 @@ export function AddNewTag(access_token, post){
 function DeleteTagReqObj(access_token, post){
     return {
         method: "post",
-        url: "/cat/api/deletetag",
+        url: "/api/deletetag",
         headers:{
             "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,       
-        }, 
+            Authorization: "Bearer " + access_token,
+        },
         data: {
             post: post
         }
@@ -179,11 +215,11 @@ export function DeleteTag(access_token, post){
 function VoteClickReqObj(access_token, vote){
     return {
         method: "post",
-        url: "/cat/api/vote",
+        url: "/api/vote",
         headers:{
             "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,       
-        }, 
+            Authorization: "Bearer " + access_token,
+        },
         data: {
             vote: vote
         }
@@ -207,7 +243,3 @@ export function NeedImprovementOpenClick(post_id=0){
         type: "NEED_IMPROVEMENT_OPEN_CLICK",
         payload: post_id
     }}
-
-
-
-

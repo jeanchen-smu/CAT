@@ -22,7 +22,7 @@ def get_timelimit(hour):
 
 telegramService = Telegram()
 
-bot_token = '307726211:AAGwbZh2nQ93i3Tf8jUoE9Ag51WCercXe5c'
+bot_token = '634867870:AAEGUBiPPRpmsqZ0BRsEWmC8iSO-FNW2BaE'
 
 # Enable logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -30,7 +30,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 
 logger = logging.getLogger(__name__)
 
-BUTTON_REPLY, SECONDTRY, CONTENT2, TITLE, CONTENT, QACOIN, TIMELIMIT, SUBMIT, CANCEL, ANSWERREPLY, ANSWER, QUESTIONID, ACCOUNT_VERIFICATION, ANSWERID, CHECK, REPLYANSWER, Q2, Q3, Q4, Q5, Q6, Q7, Q8, SUREND, LOOK_FOR_REPLY, SECONDTRY_REPLY, ANSWER2, REPLY_BUTTON = range(28)
+BUTTON_REPLY, SECONDTRY, CONTENT2, TITLE, CONTENT, QACOIN, TIMELIMIT,TAGS, CAT1,CAT2,CAT3,CAT4,CAT5,CAT6,CAT7,CAT8,CAT9,CAT10,CAT11,CAT12,CAT13,CAT14,CAT15,CAT16,CAT17,CAT18,CAT19,CAT20,CAT21,chosentags,SUBMIT, CANCEL, ANSWERREPLY, ANSWER, QUESTIONID, ACCOUNT_VERIFICATION, ANSWERID, CHECK, REPLYANSWER, Q2, Q3, Q4, Q5, Q6, Q7, Q8, SUREND, LOOK_FOR_REPLY, SECONDTRY_REPLY, ANSWER2, REPLY_BUTTON = range(51)
 
 def facts_to_str(user_data):
     facts = list()
@@ -51,8 +51,10 @@ def button(bot, update):
 
 def button_reply(bot, update, user_data):
     if update.message.text == 'TITLE':
+        global l
+        l=[]
         update.message.reply_text('Enter the title of your post.')
-        return TITLE 
+        return TITLE
     elif update.message.text == 'CONTENT':
         update.message.reply_text('Enter the content of your post.')
         return CONTENT
@@ -62,6 +64,150 @@ def button_reply(bot, update, user_data):
     elif update.message.text == 'TIMELIMIT':
         update.message.reply_text('Enter the time limit (in hours). Send /skip if you dont want to proceed.')
         return TIMELIMIT
+    elif update.message.text == 'TAGS':
+        reply_keyboard = [['CAT1','CAT2','CAT3','CAT4','CAT5','CAT6','CAT7'],
+    		        ['CAT8', 'CAT9','CAT10','CAT11','CAT12','CAT13','CAT14'],
+                          ['CAT15', 'CAT16','CAT17','CAT18','CAT19','CAT20','CAT21']]
+        update.message.reply_text('Please choose the category.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT1':
+        reply_keyboard = [['ABC Services','ABS','Absolute Referencing'],
+    		        ['Achilles and Tortoise','Advanced Filter','Alex Processing'],
+                          ['AND','Approximate Match','Array Formula']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT2':
+        reply_keyboard = [['Assignment 0','Assignment 1','Assignment 2'],
+    		        ['AUTO-FILL','AutoFilter','AVERAGE'],
+                          ['AVERAGEIF','AVERAGEIFS','binary']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT3':
+        reply_keyboard = [['BINOM.INV','BINOMDIST','Binomial'],
+    		        ['Blackbox Model','Black-Scholes','breakeven'],
+                          ['CCH Kindergarten','CDF','Charity Donation']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT4':
+        reply_keyboard = [['Circular Reference','Column Input Cell','CONCATENATE'],
+    		        ['Conditional Formatting','Constraints','Continuous Distribution'],
+                          ['Contribution Margin','Cost','COUNT']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT5':
+        reply_keyboard = [['COUNTIF','COUNTIFS','CRF table'],
+    		        ['CRITBINOM','Criteria','Data Simulation'],
+                          ['Data Table','Data Validation','DATE']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT6':
+        reply_keyboard = [['Date Formats','DAY','Decision Model'],
+    		        ['Decision variables','Discrete Distribution','Documentation'],
+                          ['Echo Office Supplies','Exact Match','Excel Options']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT7':
+        reply_keyboard = [['EXP','EXPONDIST','Exponential'],
+    		        ['External links','F1 Night City Race','Fast key'],
+                          ['FILL','Filter','Forecast']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT8':
+        reply_keyboard = [['Format','Formulas','FREQUENCY'],
+    		        ['Frequency Distribution','From Web','FV'],
+                          ['Goal Seek','Grand Grocery','Graph']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT9':
+        reply_keyboard = [['Group Project','HLOOKUP','HOUR'],
+    		        ['IF','IFERROR','IFS'],
+                          ['INDEX','Influence Diagram','INT']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT10':
+        reply_keyboard = [['integer','INTERCEPT','IRR'],
+    		        ['ISBLANK','ISERROR','ISEVEN'],
+                          ['ISNA','ISODD','ISTEXT']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT11':
+        reply_keyboard = [['LARGE','Linear Programming','LN'],
+    		        ['LOOKUP','Macro','MATCH'],
+                          ['match type','MAX','maximum solution']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT12':
+        reply_keyboard = [['MIN','minimum solution','MINUTE'],
+    		        ['Mixed Referencing','Monte Hall','MONTH'],
+                          ['Multiplication Table','Nested IF','New Function']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT13':
+        reply_keyboard = [['Normal','NORMDIST','NORMINV'],
+    		        ['NORMSDIST','NORMSINV','NOW'],
+                          ['NPER','NPV','Objective function']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT14':
+        reply_keyboard = [['OFFSET','optimal solution','OR'],
+    		        ['PDF','PERCENTILE','Pivot Chart'],
+                          ['Pivot Table','PMF','PMT']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT15':
+        reply_keyboard = [['POISSON','Polynomial','price-demand relationship'],
+    		        ['Probability Distributions','Profit','Profit Margin'],
+                          ['PV','Query file','Queue Simulation']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT16':
+        reply_keyboard = [['Quiz 1','Quiz 2','RAND'],
+    		        ['RANDBETWEEN','RATE','Referencing'],
+                          ['Relative Referencing','Retail Gasoline','Revenue']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT17':
+        reply_keyboard = [['Revision','ROUND','ROUNDDOWN'],
+    		        ['ROUNDUP','Row Input Cell','R-squared'],
+                          ['Sample Exam','Scatter','SECOND']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT18':
+        reply_keyboard = [['Sensitivity analysis','Series','Sheet'],
+    		        ['SLOPE','SMALL','Solver'],
+                          ['Solving Method','SQRT','STDEV']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT19':
+        reply_keyboard = [['SUM','SUMIF','SUMIFS'],
+    		        ['SUMPRODUCT','TEXT','Text to Columns'],
+                          ['TIME','Time Formats','Time Value']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT20':
+        reply_keyboard = [['Timer-Clicker','TODAY','Trace'],
+    		        ['Trade-off analysis','Trend','TRENDLINE'],
+                          ['Uniform','VBA','Village Coffee']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text == 'CAT21':
+        reply_keyboard = [['Visual Basic Editor','VLOOKUP','What-if Analysis'],
+    		        ['XDB Bank','YEAR']]
+        update.message.reply_text('Please choose the tags.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True,resize_keyboard=True))
+    elif update.message.text in ['YEAR','XDB Bank','What-if Analysis','VLOOKUP','Visual Basic Editor','Village Coffee','VBA','Uniform','TRENDLINE','Trend','Trade-off analysis','Trace','TODAY','Timer-Clicker','Time Value','Time Formats','TIME','Text to Columns','TEXT','SUMPRODUCT','SUMIFS','SUMIF','SUM','STDEV','SQRT','Solving Method','Solver','SMALL','SLOPE','Sheet','Series','Sensitivity analysis','SECOND','Scatter','Sample Exam','R-squared','Row Input Cell','ROUNDUP','ROUNDDOWN','ROUND','Revision','Revenue','Retail Gasoline','Relative Referencing','Referencing','RATE','RANDBETWEEN','RAND','Quiz 2','Quiz 1','Queue Simulation','Query file','PV','Profit Margin','Profit','Probability Distributions','price-demand relationship','Polynomial','POISSON','PMT','PMF','Pivot Table','Pivot Chart','PERCENTILE','PDF','OR','optimal solution','OFFSET','Objective function','NPV','NPER','NOW','NORMSINV','NORMSDIST','NORMINV','NORMDIST','Normal','New Function','Nested IF','Multiplication Table','MONTH','Monte Hall','Mixed Referencing','MINUTE','minimum solution','MIN','maximum solution','MAX','match type','MATCH','Macro','LOOKUP','LN','Linear Programming','LARGE','ISTEXT','ISODD','ISNA','ISEVEN','ISERROR','ISBLANK','IRR','INTERCEPT','integer','INT','Influence Diagram','INDEX','IFS','IFERROR','IF','HOUR','HLOOKUP','Group Project','Graph','Grand Grocery','Goal Seek','FV','From Web','Frequency Distribution','FREQUENCY','Formulas','Format','Forecast','Filter','FILL','Fast key','F1 Night City Race','External links','Exponential','EXPONDIST','EXP','Excel Options','Exact Match','Echo Office Supplies','Documentation','Discrete Distribution','Decision variables','Decision Model','DAY','Date Formats','DATE','Data Validation','Data Table','Data Simulation','Criteria','CRITBINOM','CRF table','COUNTIFS','COUNTIF','COUNT','Cost','Contribution Margin','Continuous Distribution','Constraints','Conditional Formatting','CONCATENATE','Column Input Cell','Circular Reference','Charity Donation','CDF','CCH Kindergarten','breakeven','Black-Scholes','Blackbox Model','Binomial','BINOMDIST','BINOM.INV','binary','AVERAGEIFS','AVERAGEIF','AVERAGE','AutoFilter','AUTO-FILL','Assignment 2','Assignment 1','Assignment 0','Array Formula','Approximate Match','AND','Alex Processing','Advanced Filter','Achilles and Tortoise','Absolute Referencing','ABS','ABC Services']:
+        user = update.message.from_user
+        logger.info("tags of %s: %s" % (user.first_name, update.message.text))
+        l.append(_process_string(update.message.text.encode("utf-8")))
+        user_data['tags']=tuple(l)
+        # if len(user_data['tags'])==1:
+        #     user_data['tags']=user_data['tags'][0]
+        logger.info(user_data['tags'])
+        reply_keyboard = [['TITLE', 'CONTENT'],
+    		      ['QACOIN', 'TIMELIMIT','TAGS'],
+                          ['SUBMIT', 'CANCEL']]
+        update.message.reply_text('Please choose QACOIN,TAGS,TIMELIMIT,SUBMIT or CANCEL.',
+            reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
     elif update.message.text == 'SUBMIT':
         if 'title' not in user_data:
             update.message.reply_text('Please fill in TITLE.')
@@ -80,6 +226,8 @@ def button_reply(bot, update, user_data):
                 user_data['qacoin'] = 0
             if 'timelimit' not in user_data:
                 user_data['timelimit'] = get_timelimit(24)
+            if 'tags' not in user_data:
+                user_data['tags'] =""
 	    try:
 		user_data['thought'] = telegramService.thought(user_data['content'],1)
 		reply_keyboard = [['YES','NO']]
@@ -103,6 +251,7 @@ def button_reply(bot, update, user_data):
                 user_data['chat_id'], question_id, user_data['title'], user_data['content'], user_data['qacoin'], user_data['timelimit']
             )], shell=True)
         update.message.reply_text('Your post is created')
+        # telegramService.add_tag(user_data)
         user_data.clear()
         return ConversationHandler.END
     elif update.message.text == 'SECOND':
@@ -130,7 +279,7 @@ def button_reply(bot, update, user_data):
 
 def newpost(bot, update):
     reply_keyboard = [['TITLE', 'CONTENT'],
-		      ['QACOIN', 'TIMELIMIT'],
+		      ['QACOIN', 'TIMELIMIT','TAGS'],
                       ['SUBMIT', 'CANCEL']]
     update.message.reply_text('Start a new post\n\n'
         'Select TITLE to begin.',
@@ -182,7 +331,7 @@ def title(bot, update, user_data):
     logger.info("title of %s: %s" % (user.first_name, update.message.text))
     user_data['title']=_process_string(update.message.text.encode("utf-8"))
     reply_keyboard = [['TITLE', 'CONTENT'],
-		      ['QACOIN', 'TIMELIMIT'],
+		      ['QACOIN', 'TIMELIMIT','TAGS'],
                       ['SUBMIT', 'CANCEL']]
     update.message.reply_text('Select CONTENT.',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
@@ -194,9 +343,9 @@ def content(bot, update, user_data):
     logger.info("content of %s: %s" % (user.first_name, update.message.text))
     user_data['content']=_process_string(update.message.text.encode("utf-8"))
     reply_keyboard = [['TITLE', 'CONTENT'],
-		      ['QACOIN', 'TIMELIMIT'],
+		      ['QACOIN', 'TIMELIMIT','TAGS'],
                       ['SUBMIT', 'CANCEL']]
-    update.message.reply_text('Please choose QACOIN, TIMELIMIT, SUBMIT or CANCEL.',
+    update.message.reply_text('Please choose QACOIN, TIMELIMIT,TAGS,SUBMIT or CANCEL.',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
     return BUTTON_REPLY
 
@@ -207,7 +356,7 @@ def qacoin(bot, update, user_data):
     user_qacoin = telegramService.get_user_qacoins(update.message.chat_id)
     reply_text = "You do not have enough QA Coins, please fill in QACOIN"
     reply_keyboard = [['TITLE', 'CONTENT'],
-                ['QACOIN', 'TIMELIMIT'],
+                ['QACOIN', 'TIMELIMIT','TAGS'],
                         ['SUBMIT', 'CANCEL']]
     try:
         if user_qacoin >= int(update.message.text):
@@ -222,8 +371,8 @@ def qacoin(bot, update, user_data):
 
 def skip(bot, update):
     reply_keyboard = [['TITLE', 'CONTENT'],
-		      ['QACOIN', 'TIMELIMIT'],
-                      ['SUBMIT', 'CANCEL']]
+                ['QACOIN', 'TIMELIMIT','TAGS'],
+                        ['SUBMIT', 'CANCEL']]
     update.message.reply_text('Please choose QACOIN, TIMELIMIT, SUBMIT or CANCEL.',
         reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
     return BUTTON_REPLY
@@ -232,11 +381,11 @@ def timelimit(bot, update, user_data):
     user = update.message.from_user
     logger.info("timelimit of %s: %s" % (user.first_name, update.message.text))
     reply_keyboard = [['TITLE', 'CONTENT'],
-		      ['QACOIN', 'TIMELIMIT'],
+		      ['QACOIN', 'TIMELIMIT','TAGS'],
                       ['SUBMIT', 'CANCEL']]
     try:
         user_data['timelimit']=get_timelimit(float(update.message.text))
-        update.message.reply_text('Please choose QACOIN, TIMELIMIT, SUBMIT or CANCEL.',
+        update.message.reply_text('Please choose QACOIN, TIMELIMIT,TAGS,SUBMIT or CANCEL.',
             reply_markup=ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True))
     except:
         update.message.reply_text('Time Limit has to be a number, please choose TIMELIMIT.',
@@ -656,7 +805,7 @@ dp = updater.dispatcher
 conv_handler = ConversationHandler(
 entry_points=[CommandHandler('newpost', newpost)],
 states={
-    BUTTON_REPLY: [RegexHandler('^(TITLE|CONTENT|QACOIN|TIMELIMIT|SUBMIT|CANCEL|FIRST|SECOND)$', button_reply, pass_user_data=True), 
+    BUTTON_REPLY: [RegexHandler('^(TITLE|CONTENT|QACOIN|TIMELIMIT|TAGS|CAT1|CAT2|CAT3|CAT4|CAT5|CAT6|CAT7|CAT8|CAT9|CAT10|CAT11|CAT12|CAT13|CAT14|CAT15|CAT16|CAT17|CAT18|CAT19|CAT20|CAT21|YEAR|XDB Bank|What-if Analysis|VLOOKUP|Visual Basic Editor|Village Coffee|VBA|Uniform|TRENDLINE|Trend|Trade-off analysis|Trace|TODAY|Timer-Clicker|Time Value|Time Formats|TIME|Text to Columns|TEXT|SUMPRODUCT|SUMIFS|SUMIF|SUM|STDEV|SQRT|Solving Method|Solver|SMALL|SLOPE|Sheet|Series|Sensitivity analysis|SECOND|Scatter|Sample Exam|R-squared|Row Input Cell|ROUNDUP|ROUNDDOWN|ROUND|Revision|Revenue|Retail Gasoline|Relative Referencing|Referencing|RATE|RANDBETWEEN|RAND|Quiz 2|Quiz 1|Queue Simulation|Query file|PV|Profit Margin|Profit|Probability Distributions|price-demand relationship|Polynomial|POISSON|PMT|PMF|Pivot Table|Pivot Chart|PERCENTILE|PDF|OR|optimal solution|OFFSET|Objective function|NPV|NPER|NOW|NORMSINV|NORMSDIST|NORMINV|NORMDIST|Normal|New Function|Nested IF|Multiplication Table|MONTH|Monte Hall|Mixed Referencing|MINUTE|minimum solution|MIN|maximum solution|MAX|match type|MATCH|Macro|LOOKUP|LN|Linear Programming|LARGE|ISTEXT|ISODD|ISNA|ISEVEN|ISERROR|ISBLANK|IRR|INTERCEPT|integer|INT|Influence Diagram|INDEX|IFS|IFERROR|IF|HOUR|HLOOKUP|Group Project|Graph|Grand Grocery|Goal Seek|FV|From Web|Frequency Distribution|FREQUENCY|Formulas|Format|Forecast|Filter|FILL|Fast key|F1 Night City Race|External links|Exponential|EXPONDIST|EXP|Excel Options|Exact Match|Echo Office Supplies|Documentation|Discrete Distribution|Decision variables|Decision Model|DAY|Date Formats|DATE|Data Validation|Data Table|Data Simulation|Criteria|CRITBINOM|CRF table|COUNTIFS|COUNTIF|COUNT|Cost|Contribution Margin|Continuous Distribution|Constraints|Conditional Formatting|CONCATENATE|Column Input Cell|Circular Reference|Charity Donation|CDF|CCH Kindergarten|breakeven|Black-Scholes|Blackbox Model|Binomial|BINOMDIST|BINOM.INV|binary|AVERAGEIFS|AVERAGEIF|AVERAGE|AutoFilter|AUTO-FILL|Assignment 2|Assignment 1|Assignment 0|Array Formula|Approximate Match|AND|Alex Processing|Advanced Filter|Achilles and Tortoise|Absolute Referencing|ABS|ABC Services|SUBMIT|CANCEL|FIRST|SECOND)$', button_reply, pass_user_data=True),
                     CommandHandler('newpost', newpost), CommandHandler('reply', reply)],
     SECONDTRY: [RegexHandler('^(YES|NO)$', secondtry, pass_user_data=True),CommandHandler('newpost', newpost), CommandHandler('reply', reply)],
     CONTENT2: [MessageHandler(Filters.text, content2, pass_user_data=True), CommandHandler('newpost', newpost), CommandHandler('reply', reply)],

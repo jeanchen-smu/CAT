@@ -23,7 +23,7 @@ class QuestionCard extends React.Component {
         }
         return username
     }
-    
+
     render(){
         const styles = {
             questionCard: {
@@ -44,7 +44,7 @@ class QuestionCard extends React.Component {
                     <CardText>
                         <Tag
                             tags={this.props.tags}
-                            isUser={this.props.isUser}
+                            isUser={false}
                             onRequestDelete={this.props.deleteTag}
                             questionId={this.props.questionId}
                             userId={this.props.userId}
@@ -53,14 +53,14 @@ class QuestionCard extends React.Component {
                 <CardActions style={{float:"right"}}>
                     <div>
                     <span>
-                    <Vote 
-                        upvotes={this.props.upvotes} 
-                        downvotes={this.props.downvotes} 
+                    <Vote
+                        upvotes={this.props.upvotes}
+                        downvotes={this.props.downvotes}
                         uservote={this.props.uservote}
                         post_id={this.props.questionId}/>
                     </span>
                     <span>
-                    <RaisedButton 
+                    <RaisedButton
                         label={this.props.nav.questionReply?"Cancle":"Reply"}
                         onClick={()=>this.props.questionReplyOpen()}
                     />

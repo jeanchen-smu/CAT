@@ -31,7 +31,7 @@ export function ValidatePassword(password){
 export function GetLoginInfo(email){
     const loginObject = {
         method: "post",
-            url: "/cat/api/login",
+            url: "/api/login",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -74,11 +74,11 @@ export function UpdateTelegram(tg) {
 function SetUserNameReqObj(access_token, user){
     return {
         method: "post",
-        url: "/cat/api/setusername",
+        url: "/api/setusername",
         headers:{
             "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,       
-        }, 
+            Authorization: "Bearer " + access_token,
+        },
         data: {
             user: user
         }
@@ -89,7 +89,7 @@ export function SetUserName(access_token, user, email){
     return function(dispatch){
         axios(SetUserNameReqObj(access_token, user))
             .then(response => {
-                dispatch ({type: "GET_LOGIN_SUCCEED", 
+                dispatch ({type: "GET_LOGIN_SUCCEED",
                             payload: {...response.data, access_token: access_token}})
             })
             .catch(err => {
@@ -116,3 +116,9 @@ export function SetNameDialogOpen() {
     }
 }
 
+export function UpdateSection(section){
+    return {
+        type: "UPDATE_SECTION",
+        payload: section
+    }
+}

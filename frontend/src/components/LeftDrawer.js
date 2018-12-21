@@ -38,7 +38,8 @@ class LeftDrawer extends React.Component {
 	componentDidMount(){
 		this.props.getMyStats(
 			sessionStorage.getItem("access_token"),
-			sessionStorage.getItem("userId"))
+			sessionStorage.getItem("userId"),
+			this.props.section_id?this.props.section_id:sessionStorage.getItem("default_section"))
 	}
 
 	render() {
@@ -62,14 +63,15 @@ const mapStateToProps = (state) => {
   return {
 	  stat: state.stat.stat,
 	  rankings: state.stat.rankings,
-	  nav: state.nav.navOpen
+	  nav: state.nav.navOpen,
+	  section_id: state.login.user.section_id
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-	getMyStats: (access_token, userId) => {
-            dispatch(GetMyStats(access_token, userId))
+	getMyStats: (access_token, userId, section_id) => {
+            dispatch(GetMyStats(access_token, userId, section_id))
         }
   };
 };

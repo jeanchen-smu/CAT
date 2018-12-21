@@ -3,13 +3,13 @@ import axios from "axios";
 function GetPostsReqObj(access_token, filter){
     return {
         method: "post",
-        url: "/cat/api/posts",
+        url: "/api/posts",
         headers:{
             "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,        
-        }, 
+            Authorization: "Bearer " + access_token,
+        },
         data: {
-            filter: filter 
+            filter: filter
         }
     };
 }
@@ -22,33 +22,6 @@ export function GetPosts(access_token, filter){
             })
             .catch(err => {
                 dispatch ({type: "GET_POSTS_FAIL", payload: err})
-            })
-    }
-}
-
-function SetPostReqObj(access_token, filter, post){
-    return {
-        method: "post",
-        url: "/cat/api/setpost",
-        headers:{
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,        
-        }, 
-        data: {
-            Filter: filter,
-            post: post
-        }
-    };
-}
-
-export function SetPost(access_token, filter, post){
-    return function(dispatch){
-        axios(SetPostReqObj(access_token, filter, post))
-            .then(response => {
-                dispatch ({type: "SET_POSTS_SUCCEED", payload: response.data})
-            })
-            .catch(err => {
-                dispatch ({type: "SET_POSTS_FAIL", payload: err})
             })
     }
 }
@@ -75,11 +48,11 @@ export function GotoNextPage() {
 function GetTSReqObj(access_token, post){
     return {
         method: "post",
-        url: "/cat/api/getthoughtfulness",
+        url: "/api/getthoughtfulness",
         headers:{
             "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,        
-        }, 
+            Authorization: "Bearer " + access_token,
+        },
         data: {
             post: post
         }
@@ -131,11 +104,11 @@ export function UpdateNewPostContent(content) {
 function GetTopicsReqObj(access_token){
     return {
         method: "post",
-        url: "/cat/api/get_topics",
+        url: "/api/get_topics",
         headers:{
             "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,        
-        }, 
+            Authorization: "Bearer " + access_token,
+        },
         data: {}
     };
 }
@@ -165,38 +138,38 @@ export function UpdateTopic(topic){
     }
 }
 
-function GetSessionsReqObj(access_token, avatar_id){
-    return {
-        method: "post",
-        url: "/cat/api/get_sessions",
-        headers:{
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,
-        }, 
-        data: {
-            avatar_id: avatar_id
-        }
-    };
-}
-
-export function GetSessions(access_token, avatar_id){
-    return function(dispatch){
-        axios(GetSessionsReqObj(access_token, avatar_id))
-            .then(response => {
-                dispatch ({type: "GET_SESSIONS_SUCCEED", payload: response.data})
-            })
-            .catch(err => {
-                dispatch ({type: "GET_SESSIONS_FAIL", payload: err})
-            })
-    }
-}
-
-export function UpdateSection(section){
-    return {
-        type: "UPDATE_SECTION",
-        payload: section
-    }
-}
+// function GetSessionsReqObj(access_token, avatar_id){
+//     return {
+//         method: "post",
+//         url: "/api/get_sessions",
+//         headers:{
+//             "Content-Type": "application/json",
+//             Authorization: "Bearer " + access_token,
+//         },
+//         data: {
+//             avatar_id: avatar_id
+//         }
+//     };
+// }
+//
+// export function GetSessions(access_token, avatar_id){
+//     return function(dispatch){
+//         axios(GetSessionsReqObj(access_token, avatar_id))
+//             .then(response => {
+//                 dispatch ({type: "GET_SESSIONS_SUCCEED", payload: response.data})
+//             })
+//             .catch(err => {
+//                 dispatch ({type: "GET_SESSIONS_FAIL", payload: err})
+//             })
+//     }
+// }
+//
+// export function UpdateSection(section){
+//     return {
+//         type: "UPDATE_SECTION",
+//         payload: section
+//     }
+// }
 
 export function NewEditPostOpen(){
     return {
@@ -207,11 +180,11 @@ export function NewEditPostOpen(){
 function GetNewTSReqObj(access_token, post){
     return {
         method: "post",
-        url: "/cat/api/getnewts",
+        url: "/api/getnewts",
         headers:{
             "Content-Type": "application/json",
-            Authorization: "Bearer " + access_token,        
-        }, 
+            Authorization: "Bearer " + access_token,
+        },
         data: {
             post: post
         }

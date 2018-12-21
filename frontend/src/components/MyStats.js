@@ -12,7 +12,8 @@ import {
 import LightbulbOutline from "material-ui/svg-icons/action/lightbulb-outline";
 import EuroSymbol from "material-ui/svg-icons/action/euro-symbol";
 import Equalizer from "material-ui/svg-icons/av/equalizer";
-import GetMyStats from "./../actions/statAction";
+import SelectSection from "./selectSection";
+
 
 const styles = {
     avatar: {
@@ -47,7 +48,7 @@ class MyStats extends React.Component {
           <Divider />
           <ListItem
             primaryText="Section ID"
-            secondaryText={this.props.stat.section_id}
+            secondaryText={<SelectSection/>}
             leftIcon={<Equalizer/>}
           />
           <ListItem
@@ -68,7 +69,7 @@ class MyStats extends React.Component {
         </List>
       </Paper>
     )
-  }  
+  }
 };
 
 MyStats.propTypes = {

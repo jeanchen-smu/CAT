@@ -59,15 +59,17 @@ class Telegram(Forum):
 		    \ncontent: {} 
                     \nYou have been inactive, please hold down this message to reply the answer""".format(username, question_id, title, content))
 
-    def _process_tag_sim(self, sim, post_id):
-        sim_strs = ["({}, {}, {})".format(i, post_id, j) for j, i in sim]
+    def _process_tag_sim(self,post_id):
+        self.cur.execute(sql.getALLTagIds_sql)
+        sim = self.cur.fetchall()
+        sim_strs = ["({}, {}, {})".format(i["tag_id"], post_id, 0) for i in sim]
         return " ,".join(sim_strs)
 
     def _insert_tag_ass(self, post, post_id):
         tag_service = Tag(post)
         tag_service.newTag()
         self.cur.execute(sql.newTag_sql.format(
-            self._process_tag_sim(tag_service.sim, post_id)
+            self._process_tag_sim( post_id)
         ))
         self.con.commit()
     
@@ -77,28 +79,32 @@ class Telegram(Forum):
         qacoins = post['qacoin']
         subject = post['title']
         question = post['content']
+        tags=post['tags']
+        #section_id = post['section_id']
         is_qa_bountiful = 1 if qacoins>0 else 0
         time_limit_qa = post['timelimit']
         time_limit_bot = self._date()+" "+self._time()
         self.cur.execute(sql.teleNewPost_sql.format(
             chat_id,
             self._process_string(subject),
-            self._process_string(question), 
-            0, 
+            self._process_string(question),
+            0,
             self._date()+" "+self._time(),
-            is_qa_bountiful, 
-            time_limit_qa, 
+            is_qa_bountiful,
+            time_limit_qa,
             time_limit_bot,
             self._qacoin(question, 1, chat_id),
             qacoins,
             thoughtfulness,
-	    previous_id))
+	    previous_id,
+        chat_id))
         self.con.commit()
-        question_id = self.cur.lastrowid
-        self._insert_tag_ass(post["content"], question_id)
+        post_id = self.cur.lastrowid
+        self._insert_tag_ass(post["content"], post_id)
+        self._update_tags(post_id, post)
 	self._insert_thought_sim(question_id)
         self._close()
-        return question_id
+        return post_id
 
     def thought(self, question, q_a):
         self._init_con()
@@ -479,6 +485,34 @@ class Telegram(Forum):
 	    text=text+'post id:'+str(qa['post_id'])+'\n'+'QA coin:-1\n'+str(qa['timestamp'])+'\n\n'
 	text = text + '\n\nTotal QA coins:' + str(round(qacoin,2))
         self.bot.send_message(chat_id=chat_id, text=text)
+	
+    def _get_tags(self, post_id):
+        cursor = self.cur.execute(sql.getTags_sql.format(post_id, config.tag_association))
+        return list(self.cur.fetchall())
+    
+    def _update_tags(self, post_id, user_data):
+        if len(user_data['tags'])==1:
+            k=user_data['tags']
+            try:
+                self.cur.execute(
+                    sql.updateTelePost1Tag_sql.format(
+                        post_id,k[0]))
+                self.con.commit()
+                return True
+            except:
+                return False
+        else:
+            try:
+                self.cur.execute(
+                    sql.updateTelePostTag_sql.format(
+                        post_id, user_data['tags']))
+                self.con.commit()
+                return True
+            except:
+                return False
+
+    def add_tag(self, user_data):
+        return self._update_tags(1, user_data)				
 
 
     def Thistory(self, chat_id):

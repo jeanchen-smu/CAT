@@ -44,7 +44,7 @@ class QuestionCard extends React.Component {
                     <CardText>
                         <Tag
                             tags={this.props.tags}
-                            isUser={this.props.isUser}
+                            isUser={false}
                             onRequestDelete={this.props.deleteTag}
                             questionId={this.props.questionId}
                             userId={this.props.userId}
