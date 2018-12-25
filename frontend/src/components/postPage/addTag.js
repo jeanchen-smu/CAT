@@ -79,11 +79,12 @@ class AddTag extends React.Component {
                 );
                 this.props.addTagClose()}}
             />,
-        ];
+        ];  
         return (
-            <FloatingActionButton
+            <FloatingActionButton 
                 style={this.styles.addTagButton}
                 mini={true}
+                disabled={this.props.tags.length==3}
                 onClick={()=>this.props.addTagOpen()}
             >
             <ContentAdd />
@@ -112,7 +113,8 @@ const mapStateToProps = (state) => {
 	  nav: state.nav,
       newTags: state.ques.newTags,
       questionId: state.ques.post.question.questionId,
-      userId: state.login.user.userId
+      userId: state.login.user.userId,
+      tags: state.ques.post.question.tags
   };
 };
 
