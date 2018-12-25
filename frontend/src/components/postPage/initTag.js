@@ -5,6 +5,7 @@ import Tag from "./tag"
 import {InitTagOpenClick} from './../../actions/questionAction';
 import Dialog from 'material-ui/Dialog';
 import {DeleteTag} from './../../actions/questionAction';
+import Paper from "material-ui/Paper";
 
 
 class InitTag extends React.Component {
@@ -14,6 +15,7 @@ class InitTag extends React.Component {
             <FlatButton
                 label="Confirm Tags"
                 primary={true}
+                disabled={this.props.tags.length==0}
                 onClick={()=>this.props.initTagOpenClick()}
             />
         ];  
@@ -24,6 +26,9 @@ class InitTag extends React.Component {
                 modal={false}
                 open={this.props.nav}
             >
+                <div>
+                    Please select 1 to 3 tags for your post.
+                </div>
                 <Tag
                     tags={this.props.tags}
                     isUser={true}
