@@ -20,7 +20,7 @@ export default function StatReducer(state={
         }
         case "GET_MY_STATS_FAIL": {
             sessionStorage.removeItem("token");
-		    browserHistory.push("/login");
+		    browserHistory.push("/cat/login");
             return {
                 ...state,
                 fetched: false,
