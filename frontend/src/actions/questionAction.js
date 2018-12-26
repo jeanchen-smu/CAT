@@ -4,7 +4,7 @@ import { browserHistory } from 'react-router';
 function SetPostReqObj(access_token, filter, post){
     return {
         method: "post",
-        url: "/api/setpost",
+        url: "/cat/api/setpost",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token,
@@ -23,7 +23,7 @@ export function SetPost(access_token, filter, post){
                 dispatch ({type: "SET_POSTS_SUCCEED", payload: response.data})
             })
             .then(() => {
-                browserHistory.push("/home/post");
+                browserHistory.push("/cat/home/post");
             })
             .catch(err => {
                 dispatch ({type: "SET_POSTS_FAIL", payload: err})
@@ -40,7 +40,7 @@ export function SetPost(access_token, filter, post){
 function GetQuestionReqObj(access_token, questionId, userId){
     return {
         method: "post",
-        url: "/api/question",
+        url: "/cat/api/question",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token,
@@ -59,7 +59,7 @@ export function GetQuestion(access_token, questionId, userId){
                 dispatch ({type: "GET_QUESTION_SUCCEED", payload: response.data})
             })
             .then(() => {
-                browserHistory.push("/home/post");
+                browserHistory.push("/cat/home/post");
             })
             .catch(err => {
                 dispatch ({type: "GET_QUESTION_FAIL", payload: err})
@@ -70,7 +70,7 @@ export function GetQuestion(access_token, questionId, userId){
 function SetAnswerReqObj(access_token, answer){
     return {
         method: "post",
-        url: "/api/setanswer",
+        url: "/cat/api/setanswer",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token,
@@ -137,7 +137,7 @@ export function EndThoughtfulness(){
 function UpdateThoughtfulnessReqObj(access_token, post){
     return {
         method: "post",
-        url: "/api/setthoughtfulness",
+        url: "/cat/api/setthoughtfulness",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token,
@@ -163,7 +163,7 @@ export function UpdateThoughtfulness(access_token, post){
 function AddNewTagReqObj(access_token, post){
     return {
         method: "post",
-        url: "/api/addtag",
+        url: "/cat/api/addtag",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token,
@@ -189,7 +189,7 @@ export function AddNewTag(access_token, post){
 function DeleteTagReqObj(access_token, post){
     return {
         method: "post",
-        url: "/api/deletetag",
+        url: "/cat/api/deletetag",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token,
@@ -215,7 +215,7 @@ export function DeleteTag(access_token, post){
 function VoteClickReqObj(access_token, vote){
     return {
         method: "post",
-        url: "/api/vote",
+        url: "/cat/api/vote",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token,
