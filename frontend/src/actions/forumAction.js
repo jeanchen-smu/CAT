@@ -180,7 +180,7 @@ export function NewEditPostOpen(){
 function GetNewTSReqObj(access_token, post){
     return {
         method: "post",
-        url: "/api/getnewts",
+        url: "/cat/api/getnewts",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token,
