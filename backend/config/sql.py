@@ -54,7 +54,7 @@ newPost_sql = """INSERT INTO post (avatar_id, post_subject,
 replyToPost_select_sql = "SELECT level FROM post WHERE post_id = %s"
 
 replyToPost_insert_sql = """INSERT INTO post (avatar_id, post_content, level, is_question,
-                            is_bot, `timestamp`, question_id, qa_coin_basic, 
+                            is_bot, `timestamp`, question_id, qa_coin_basic,
                             thoughtfulness_score, parent_id, previous_id)
                             VALUES ({}, '{}', {}, 0, {}, '{}', {}, {}, {}, {}, {})"""
 
@@ -70,20 +70,20 @@ getPosts_sql = """SELECT post_id as 'key', post_subject as subject,
 
 getPost_sql = """SELECT post_id AS questionId, avatar_name AS username, p.avatar_id as userId,
                 timestamp AS date, post_subject As subject, post_content AS question,
-                reviewed, thoughtfulness_score, 
+                reviewed, thoughtfulness_score,
                 (select ifnull((select upvotes from (select post_id, count(*) as upvotes from vote where vote=1 group by post_id)  uv where  uv.post_id=p.post_id), 0)) as upvotes,
                 (select ifnull((select downvotes from (select post_id, count(*) as downvotes from vote where vote=2 group by post_id)  dv where  dv.post_id=p.post_id), 0)) as downvotes,
                 (select ifnull((select vote from vote where post_id=p.post_id and avatar_id={}),0) ) as uservote
                 FROM post p, avatar a WHERE p.avatar_id = a.avatar_id AND post_id = {}"""
 
-getAnswer_sql = """SELECT post_id AS answerId, parent_id, level, avatar_name AS username, 
-                (SELECT avatar_name FROM avatar WHERE avatar_id = 
+getAnswer_sql = """SELECT post_id AS answerId, parent_id, level, avatar_name AS username,
+                (SELECT avatar_name FROM avatar WHERE avatar_id =
                 (SELECT avatar_id FROM post WHERE post_id = p.parent_id)) AS pUserName,
                 timestamp AS date, post_content AS answer, reviewed, thoughtfulness_score,
                 (select ifnull((select upvotes from (select post_id, count(*) as upvotes from vote where vote=1 group by post_id)  uv where  uv.post_id=p.post_id), 0)) as upvotes,
                 (select ifnull((select downvotes from (select post_id, count(*) as downvotes from vote where vote=2 group by post_id)  dv where  dv.post_id=p.post_id), 0)) as downvotes,
-                (select ifnull((select vote from vote where post_id=p.post_id and avatar_id={}),0) ) as uservote 
-                FROM post p, avatar a 
+                (select ifnull((select vote from vote where post_id=p.post_id and avatar_id={}),0) ) as uservote
+                FROM post p, avatar a
                 WHERE p.avatar_id = a.avatar_id AND question_id = {}"""
 
 updateReviewed_sql = """UPDATE post SET reviewed=1 WHERE post_id={}"""
@@ -114,6 +114,8 @@ updateQA_QAF_sql = "SELECT qaf FROM qaf WHERE posi_id = %s"
 
 updateQA_update_sql = "UPDATE post SET qa_coin_basic = %s WHERE posi_id = %s"
 
+
+
 ###Thoughtfulness###
 contentOfPost_sql = "SELECT post_content FROM post WHERE post_id = %s"
 
@@ -136,7 +138,7 @@ newUserThought_select_sql = """SELECT SUM(thoughtfulness_score), MAX(`timestamp`
 newUserThought_insert_sql = """insert into thoughtfulness_score (post_id,
 				average_number_of_characters_per_word,
 				average_number_of_words_per_sentence,
-				number_of_words, 
+				number_of_words,
 				discourse_relations_score,
 				formula_count,
 				average_noun_phrases_per_sentence,
@@ -144,7 +146,7 @@ newUserThought_insert_sql = """insert into thoughtfulness_score (post_id,
 				average_pronouns_phrases_per_sentence,
 				number_of_links,
 				type_of_question,
-				average_number_of_subordinate_clauses_per_sentence) VALUES 
+				average_number_of_subordinate_clauses_per_sentence) VALUES
 				({}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {})"""
 
 
@@ -154,17 +156,38 @@ newQAF_select_sql = "SELECT MAX(post_id), MAX(`timestamp`), COUNT(post_id) FROM 
 newQAF_insert_sql = "INSERT INTO qaf(avatar_id, post_id, qaf, `timestamp`)VALUES(%s, %s, %s, %s)"
 
 ###Tag###
-newTag_sql = """INSERT INTO post_tag(tag_id, post_id, association) 
+newTag_sql = """INSERT INTO post_tag(tag_id, post_id, association)
                 VALUES {}"""
 
-getTags_sql = """SELECT tag_id AS 'key', tag AS label FROM tag WHERE tag_id IN 
-            (SELECT tag_id FROM post_tag WHERE post_id = {} 
+getTags_sql = """SELECT tag_id AS 'key', tag AS label FROM tag WHERE tag_id IN
+            (SELECT tag_id FROM post_tag WHERE post_id = {}
             AND association >= {})"""
 
-getAllTags_sql = """SELECT * FROM tag where tag_id in (select tag_id from post_tag where 
+getAllTags_sql = """SELECT * FROM tag where tag_id in (select tag_id from post_tag where
                 association<={} and post_id={})"""
 
 updatePostTag_sql = """UPDATE post_tag SET association={} WHERE post_id={} and tag_id={}"""
+
+updateTelePostTag_sql = """UPDATE post_tag SET association=1 WHERE post_id={} and tag_id in (select tag_id from tag where tag in {});"""
+
+updateTelePost1Tag_sql = """UPDATE post_tag SET association=1 WHERE post_id={} and tag_id in (select tag_id from tag where tag ='{}');"""
+
+getALLTagIds_sql = """SELECT tag_id from tag"""
+
+getTags_tele="""SELECT tag_id from tags where tag ={}"""
+
+# updatePost_selected_sql = """INSERT INTO post_tag(tag, post_id,association) VALUES({},{},{}) """
+
+#selectTags_sql="""SELECT tag from tag ORDER BY tag"""
+
+# updatePost_selected_Tag_sql="""INSERT INTO post_tag_select(post_id,tag_id)VALUES({},{});
+
+
+
+getAllTags_sql = """SELECT tag FROM tag"""
+
+#getTags_user_chosen_sql="""SELECT tag_id as 'key',tag as'label' from tag WHERE tag_id in (SELECT tag_id from post_tag WHERE post_id={})"""
+
 
 ###abandoned_post###
 insertAbandonedPost_sql = """INSERT INTO abandoned_post(post_subject, post_content, thoughtfulness_score)
@@ -185,41 +208,41 @@ teleNewPost_sql = """INSERT INTO post (avatar_id, post_subject,
 
 botGetChatId = "select * from avatar"
 
-teleGetChatId = """select * from (select * from avatar where not isnull(chat_id) and chat_id != '' and 
-section_id=(select section_id from avatar where 
+teleGetChatId = """select * from (select * from avatar where not isnull(chat_id) and chat_id != '' and
+section_id=(select section_id from avatar where
 avatar_id=(select avatar_id from post where post_id=(select case when level > 1 then question_id else post_id end from post where post_id = {})))
 union
-select * from avatar where avatar_id=(select avatar_id from a_section where 
-section=(select section_id from avatar where 
+select * from avatar where avatar_id=(select avatar_id from a_section where
+section=(select section_id from avatar where
 avatar_id=(select avatar_id from post where post_id=(select case when level > 1 then question_id else post_id end from post where post_id = {}))))) x group by avatar_id"""
 
-webGetChatId = """select * from (select * from avatar where not isnull(chat_id) and chat_id != '' and 
-section_id=(select section_id from avatar where 
+webGetChatId = """select * from (select * from avatar where not isnull(chat_id) and chat_id != '' and
+section_id=(select section_id from avatar where
 avatar_id=(select avatar_id from post where post_id=(select case when level > 1 then question_id else post_id end from post where post_id = {})))
 union
-select * from avatar where avatar_id=(select avatar_id from a_section where 
-section=(select section_id from avatar where 
+select * from avatar where avatar_id=(select avatar_id from a_section where
+section=(select section_id from avatar where
 avatar_id=(select avatar_id from post where post_id=(select case when level > 1 then question_id else post_id end from post where post_id = {}))))) x group by avatar_id"""
 
 teleGetAvatarId = """select * from avatar where not isnull(chat_id) and
-                    chat_id != '' and 
-                    section_id=(select section_id from avatar where 
+                    chat_id != '' and
+                    section_id=(select section_id from avatar where
                     avatar_id='{}')"""
 
 teleReplyToPost_insert_sql = """INSERT INTO post (avatar_id, post_content, level, is_question,
-                            is_bot, `timestamp`, question_id, qa_coin_basic, 
+                            is_bot, `timestamp`, question_id, qa_coin_basic,
                             thoughtfulness_score, parent_id)
                             VALUES ((SELECT avatar_id from avatar where chat_id={}),
                              '{}', {}, 0, {}, '{}', {}, {}, {}, {})"""
 
 teleReplyToReply_insert_sql = """INSERT INTO post (avatar_id, post_content, level, is_question,
-                            is_bot, `timestamp`, question_id, qa_coin_basic, 
+                            is_bot, `timestamp`, question_id, qa_coin_basic,
                             thoughtfulness_score, parent_id)
                             VALUES ((SELECT avatar_id from avatar where chat_id={}),
                              '{}', (select level from (select * from post) a where post_id={})+1, 0, {}, '{}', (select question_id from (select * from post) b where post_id={}), {}, {}, {})"""
 
 teleReply2Reply_insert_sql = """INSERT INTO post (avatar_id, post_content, level, is_question,
-                            is_bot, `timestamp`, question_id, qa_coin_basic, 
+                            is_bot, `timestamp`, question_id, qa_coin_basic,
                             thoughtfulness_score, parent_id)
                             VALUES ((SELECT avatar_id from avatar where chat_id={}),
                              '{}', (select level from (select * from post) a where post_id={})+1, 0, {}, '{}', (select if(question_id=0, {}, question_id) from (select * from post) b where post_id={}), {}, {}, {})"""
@@ -244,7 +267,7 @@ insertTraining_sql = """insert into training (post_id, Mark, q_or_a) VALUES ({},
 updateTraining_sql = """UPDATE training tr
        JOIN thoughtfulness_score t
        ON tr.post_id = t.post_id
-SET 
+SET
 tr.average_number_of_characters_per_word = t.average_number_of_characters_per_word,
 tr.average_number_of_words_per_sentence = t.average_number_of_words_per_sentence,
 tr.number_of_words = t.number_of_words,
@@ -269,37 +292,37 @@ survey_chat_sql = "select chat_id from avatar where avatar_id in (select avatar_
 vote_sql = """INSERT INTO vote (post_id, avatar_id, timestamp, vote) VALUES ({}, {}, '{}', {})
             ON DUPLICATE KEY UPDATE timestamp='{}', vote={}"""
 
-getSessions_sql = """select section_id from ((select avatar_id, section_id from avatar) 
-                    union (select avatar_id, section as section_id from a_section) ) 
+getSessions_sql = """select section_id from ((select avatar_id, section_id from avatar)
+                    union (select avatar_id, section as section_id from a_section) )
                      as T where avatar_id ={}"""
 
-getPostsBySection_sql = """SELECT post_id as 'key', post_subject as subject, 
-                qa_coin_bounty as qacoins, timestamp as date, 
+getPostsBySection_sql = """SELECT post_id as 'key', post_subject as subject,
+                qa_coin_bounty as qacoins, timestamp as date,
                 (select count(*) from post	where question_id = p.post_id) as commentCounts,
-                (select count(*) from post where (isnull(reviewed) or reviewed=0) and 
+                (select count(*) from post where (isnull(reviewed) or reviewed=0) and
                 (post_id=p.post_id or question_id=p.post_id)) as reviewCounts,
-                avatar_name as username FROM post p, avatar a 
-                WHERE is_question = 1 and p.avatar_id = a.avatar_id and 
+                avatar_name as username FROM post p, avatar a
+                WHERE is_question = 1 and p.avatar_id = a.avatar_id and
                 (section_id='{}')
                 ORDER BY `timestamp` DESC"""
 
-getPostsByTopicSection_sql = """SELECT post_id as 'key', post_subject as subject, 
-                qa_coin_bounty as qacoins, timestamp as date, 
+getPostsByTopicSection_sql = """SELECT post_id as 'key', post_subject as subject,
+                qa_coin_bounty as qacoins, timestamp as date,
                 (select count(*) from post	where question_id = p.post_id) as commentCounts,
-                (select count(*) from post where (isnull(reviewed) or reviewed=0) and 
+                (select count(*) from post where (isnull(reviewed) or reviewed=0) and
                 (post_id=p.post_id or question_id=p.post_id)) as reviewCounts,
-                avatar_name as username FROM post p, avatar a 
-                WHERE is_question = 1 and p.avatar_id = a.avatar_id and post_id in (select post_id from post_tag where tag_id in (select tag_id from 
-                tag_topic where topic_id ={}) and association > {}) and 
-                (section_id='{}')
+                avatar_name as username FROM post p, avatar a
+                WHERE is_question = 1 and p.avatar_id = a.avatar_id and post_id in (select post_id from post_tag where tag_id in (select tag_id from
+                tag_topic where topic_id ={}) and association > {}) and
+                (p.section_id='{}')
                 ORDER BY `timestamp` DESC"""
 
-qabasic_sql = """select post_id, timestamp, qa_coin_basic from post where 
-                    avatar_id=(select avatar_id from avatar where 
+qabasic_sql = """select post_id, timestamp, qa_coin_basic from post where
+                    avatar_id=(select avatar_id from avatar where
                     chat_id='{}')"""
 
-qaimprove_sql = """select avatar_id, post_id, timestamp, vote from vote where 
-                    avatar_id=(select avatar_id from avatar where 
+qaimprove_sql = """select avatar_id, post_id, timestamp, vote from vote where
+                    avatar_id=(select avatar_id from avatar where
                     chat_id='{}') and vote=2"""
 
 qagive_sql = """select p.post_id as post_id, p.time_limit_qa as timestamp, p.qa_coin_bounty as qa_coin from post p join post po on p.post_id = po.question_id where p.avatar_id=(select avatar_id from avatar where chat_id='{}') and p.time_limit_qa<=NOW() and p.level=1 and p.qa_coin_bounty>0 and po.thoughtfulness_score>=2 and po.timestamp < p.time_limit_qa order by po.thoughtfulness_score desc limit 1"""
@@ -308,8 +331,6 @@ qaearn_sql = """select po.post_id as post_id, p.time_limit_qa as timestamp, p.qa
 
 qaloss_sql = "SELECT post_id, qa_coin_bounty FROM post WHERE level=1 and time_limit_qa>NOW() and avatar_id=(select avatar_id from avatar where chat_id='{}')"
 
-thought_sql = """select post_id, timestamp, thoughtfulness_score from post where 
-                    avatar_id=(select avatar_id from avatar where 
+thought_sql = """select post_id, timestamp, thoughtfulness_score from post where
+                    avatar_id=(select avatar_id from avatar where
                     chat_id='{}')"""
-
-
