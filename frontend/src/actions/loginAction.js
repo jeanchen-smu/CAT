@@ -31,7 +31,7 @@ export function ValidatePassword(password){
 export function GetLoginInfo(email){
     const loginObject = {
         method: "post",
-            url: "/api/login",
+            url: "/cat/api/login",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -74,7 +74,7 @@ export function UpdateTelegram(tg) {
 function SetUserNameReqObj(access_token, user){
     return {
         method: "post",
-        url: "/api/setusername",
+        url: "/cat/api/setusername",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token,
