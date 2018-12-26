@@ -35,7 +35,7 @@ class AddTag extends React.Component {
     componentDidMount(){
         const getTagObj = {
             method: "post",
-                url: "/api/get_tags",
+                url: "/cat/api/get_tags",
                 headers: {
                     "Content-Type": "application/json",
                     Authorization: "Bearer " + sessionStorage.getItem("access_token")
