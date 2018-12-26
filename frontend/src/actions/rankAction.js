@@ -3,7 +3,7 @@ import axios from "axios";
 function getRankObject(){
     return {
         method: "post",
-        url: "/api/rank",
+        url: "/cat/api/rank",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + localStorage.getItem("access_token")            
