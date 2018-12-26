@@ -39,7 +39,7 @@ class Header extends React.Component {
 
     logOut(){
         localStorage.removeItem("token");
-		browserHistory.push("/login");
+		browserHistory.push("/cat/login");
     }
 
 	getTitle() {
@@ -67,7 +67,7 @@ class Header extends React.Component {
 	}
 
 	handleTouchTap() {
-		browserHistory.push("/home")
+		browserHistory.push("/cat/home")
 	}
 
 	getShortForm(username){
