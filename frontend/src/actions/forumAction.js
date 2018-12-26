@@ -3,7 +3,7 @@ import axios from "axios";
 function GetPostsReqObj(access_token, filter){
     return {
         method: "post",
-        url: "/api/posts",
+        url: "/cat/api/posts",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token,
@@ -48,7 +48,7 @@ export function GotoNextPage() {
 function GetTSReqObj(access_token, post){
     return {
         method: "post",
-        url: "/api/getthoughtfulness",
+        url: "/cat/api/getthoughtfulness",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token,
@@ -104,7 +104,7 @@ export function UpdateNewPostContent(content) {
 function GetTopicsReqObj(access_token){
     return {
         method: "post",
-        url: "/api/get_topics",
+        url: "/cat/api/get_topics",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token,
