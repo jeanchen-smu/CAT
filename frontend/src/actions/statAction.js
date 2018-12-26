@@ -3,7 +3,7 @@ import axios from "axios";
 function getStatReqObj(access_token, userId, section_id){
     return {
         method: "post",
-        url: "/api/stat",
+        url: "/cat/api/stat",
         headers:{
             "Content-Type": "application/json",
             Authorization: "Bearer " + access_token         
