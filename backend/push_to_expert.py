@@ -19,7 +19,7 @@ while True:
     
     yesterday= str(datetime.datetime.today()-datetime.timedelta(days=1)).split()[0] + "%"
     #print yesterday
-    engine = create_engine("mysql://jeanchen:LARCdata9696@10.0.106.72:3307/jeanchen")
+    engine = create_engine("mysql://avsingh:LARCdata9153@10.0.106.72:3307/avsingh")
     sql_post = 'SELECT * FROM post where (time_limit_qa like %(yesterday)s) and (level=1)'
     post = pd.read_sql(sql=sql_post,params={'yesterday':yesterday},con=engine)
     post = post.reset_index()    
