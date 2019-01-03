@@ -14,56 +14,84 @@ from sklearn.externals import joblib
 class Telegram(Forum):
     def __init__(self):
         Forum.__init__(self)
-        self.bot = telegram.Bot(token=config.bot_token)
-    
+        self.bot =telegram.Bot(token=config.bot_token)
+
     def _bot_message(self, chat_id, username, question_id, title, content, answer_id=None, qa_coins=None, time_limit=None):
 	if answer_id!=None:
-	    self.bot.send_message(chat_id=chat_id, 
+	    self.bot.send_message(chat_id=chat_id,
 		text="""{} has a new post:
 			\nquestion_id: {}
 		        \nanswer_id: {}
-		         \ncontent: {} 
+		         \ncontent: {}
 		         \nPlease hold down this message to reply the answer
                          \nIf you want to see a series of posts for this answer, send /showall""".format(username, question_id, answer_id, content))
 	elif qa_coins==None:
-            self.bot.send_message(chat_id=chat_id, 
+            self.bot.send_message(chat_id=chat_id,
 		text="""{} has a new post:
-		        \nquestion_id: {} 
-		         \ntitle: {} 
-		         \ncontent: {} 
+		        \nquestion_id: {}
+		         \ntitle: {}
+		         \ncontent: {}
 		         \nPlease hold down this message to reply the question""".format(username, question_id, title, content))
 	else:
-	    self.bot.send_message(chat_id=chat_id, 
+	    self.bot.send_message(chat_id=chat_id,
 		text="""{} has a new post:
-		        \nquestion_id: {} 
-		         \ntitle: {} 
-		         \ncontent: {} 
+		        \nquestion_id: {}
+		         \ntitle: {}
+		         \ncontent: {}
 			 \nQACoins: {}.
 			 \ntimelimit: {}
 		         \nPlease hold down this message to reply the question""".format(username, question_id, title, content, qa_coins, time_limit))
 
     def _bot_expert(self, chat_id, username, question_id, title, content):
-        self.bot.send_message(chat_id=chat_id, 
+        self.bot.send_message(chat_id=chat_id,
 	    text="""{} has a question:
 		    \nquestion_id: {}
-                    \ntitle: {} 
-		    \ncontent: {} 
+                    \ntitle: {}
+		    \ncontent: {}
                     \nYou have been identified to be expert in this quesstion, please hold down this message to reply the answer""".format(username, question_id, title, content))
 
 
     def _bot_inactive(self, chat_id, username, question_id, title, content):
-        self.bot.send_message(chat_id=chat_id, 
+        self.bot.send_message(chat_id=chat_id,
 	    text="""{} has a question:
 		    \nquestion_id: {}
-                    \ntitle: {} 
-		    \ncontent: {} 
+                    \ntitle: {}
+		    \ncontent: {}
                     \nYou have been inactive, please hold down this message to reply the answer""".format(username, question_id, title, content))
+
+    def _pagination(self, tag_list):
+        pagination_list = []
+        while len(tag_list)>10:
+            pagination_list.append(tag_list[:10])
+            del tag_list[:10]
+        pagination_list.append(tag_list)
+        return pagination_list
+
+    def getAlltagsfromDB(self):
+        b=[]
+        self._init_con()
+        self.cur.execute(sql.getAllTagsfrom_sql)
+        values = self.cur.fetchall()
+        #values=list(values)
+        self._close()
+        for row in values:
+            b.append(row['tag'])
+        return b
+
+
 
     def _process_tag_sim(self,post_id):
         self.cur.execute(sql.getALLTagIds_sql)
         sim = self.cur.fetchall()
         sim_strs = ["({}, {}, {})".format(i["tag_id"], post_id, 0) for i in sim]
         return " ,".join(sim_strs)
+
+    # def _process_tag_sim(self,post_id):
+    #     sql.cur.execute(sql.getTags_tele.format(tags));
+    #     result=self.cur.fetchall()
+    #     ins=["({},{})".format(i['tag_id'],post_id) for i in result]
+    #     return ','.join(ins)
+
 
     def _insert_tag_ass(self, post, post_id):
         tag_service = Tag(post)
@@ -72,7 +100,13 @@ class Telegram(Forum):
             self._process_tag_sim( post_id)
         ))
         self.con.commit()
-    
+
+    # def _insert_tag_ass(self, post, post_id):
+    #     self.cur.execute(sql.newTag_sql.format(
+    #         self._process_tag_sim( post_id)
+    #     ))
+    #     self.con.commit()
+
     def newPost(self, post, thoughtfulness, previous_id='null'):
         self._init_con()
         chat_id = post['chat_id']
@@ -100,9 +134,11 @@ class Telegram(Forum):
         chat_id))
         self.con.commit()
         post_id = self.cur.lastrowid
+        # self.cur.execute(sql.updatePost_selected_sql.format(tags,post_id,1))
         self._insert_tag_ass(post["content"], post_id)
         self._update_tags(post_id, post)
 	self._insert_thought_sim(question_id)
+        #tags = self._get_tags(post_id)
         self._close()
         return post_id
 
@@ -114,13 +150,13 @@ class Telegram(Forum):
 
     def insert_abandoned_post(self, post, q_a, thought):
         self._init_con()
-        subject = "" if q_a == 0 else post['title'] 
+        subject = "" if q_a == 0 else post['title']
         insert_sql = sql.insertAbandonedPost_sql.format(subject, post['content'], thought)
         self.cur.execute(insert_sql)
         self.con.commit()
         post_id = self.cur.lastrowid
         self._close()
-        return post_id   
+        return post_id
 
     def tele_push_message(self, chat_id, question_id, title, content, answer_id, qa_coins=None, timelimit=None):
         self._init_con()
@@ -141,7 +177,7 @@ class Telegram(Forum):
 		    content,
 		    answer_id,
 		    qa_coins,
-		    timelimit 
+		    timelimit
 		)
 	    except:
 		continue
@@ -165,7 +201,7 @@ class Telegram(Forum):
 		    content,
 		    answer_id,
 		    qa_coins,
-		    timelimit 
+		    timelimit
 		)
 	    except:
 		continue
@@ -230,7 +266,7 @@ class Telegram(Forum):
                 self._bot_message(
                     user['chat_id'],
                     post_user_name,
-                    question_id, 
+                    question_id,
                     title,
                     content,
 		    answer_id,
@@ -305,11 +341,11 @@ class Telegram(Forum):
         for v in values:
 	    a.append(v['chat_id'])
         return a
-    
+
     def _get_question_id(self, post_id):
 	self.cur.execute(
 		"select if(question_id=0, {}, question_id)as q_id from post where post_id={}".format(post_id, post_id)
-) 
+)
 	question_id = self.cur.fetchall()[0]['q_id']
 	return question_id
 
@@ -372,7 +408,7 @@ class Telegram(Forum):
         self.cur.execute(sql.upsertChatId_sql.format(chat_id, self._process_string(username)))
         self.con.commit()
         self._close()
-            
+
     def verify_telgram(self, username):
         self._init_con()
         self.cur.execute("select * from avatar where telegram_account='{}'".format(self._process_string(username)))
@@ -398,26 +434,27 @@ class Telegram(Forum):
 		return np.power(2, ranking/float(len(users)))
             ranking += 1
 	return 2
-    
+
     def _thoughtfulness_score(self, content, q_a):
-        self.v1 = average_number_of_characters_per_word(content)
-        self.v2 = average_number_of_words_per_sentence(content)
-        self.v3 = number_of_words(content)
-        self.v4 = discourse_relations_score(content)
-        self.v5 = formula_count(content)
-        self.v6 = average_noun_phrases_per_sentence(content)
-        self.v7 = average_verb_phrases_per_sentence(content)
-        self.v8 = average_pronouns_phrases_per_sentence(content)
-        self.v9 = number_of_links(content)
-        self.v10 = type_of_question(content)
-        self.v11 = 1
-        v12 = q_a
-        X = np.column_stack([self.v1,self.v2,self.v3,self.v4,self.v5,self.v6,self.v7,self.v8,self.v9,self.v10,self.v11,v12])
-        filename = "/home/jeanc/rfr_model.sav"
-        rfr = joblib.load(filename)
-        mark = rfr.predict(X)[0]
-        return round(mark,2)
-            
+         self.v1 = average_number_of_characters_per_word(content)
+         self.v2 = average_number_of_words_per_sentence(content)
+         self.v3 = number_of_words(content)
+         self.v4 = discourse_relations_score(content)
+         self.v5 = formula_count(content)
+         self.v6 = average_noun_phrases_per_sentence(content)
+         self.v7 = average_verb_phrases_per_sentence(content)
+         self.v8 = average_pronouns_phrases_per_sentence(content)
+         self.v9 = number_of_links(content)
+         self.v10 = type_of_question(content)
+         self.v11 = 1
+         v12 = q_a
+         X = np.column_stack([self.v1,self.v2,self.v3,self.v4,self.v5,self.v6,self.v7,self.v8,self.v9,self.v10,self.v11,v12])
+         filename = "/home/avsingh/rfr_model.sav"
+         rfr = joblib.load(filename)
+         mark = rfr.predict(X)[0]
+         return round(mark,2)
+         
+
     def _qacoin(self, content, q_a, avatar_id):
         qaf = self._get_ranking_percentile(avatar_id)
         score = self._thoughtfulness_score(content, q_a)
@@ -485,11 +522,37 @@ class Telegram(Forum):
 	    text=text+'post id:'+str(qa['post_id'])+'\n'+'QA coin:-1\n'+str(qa['timestamp'])+'\n\n'
 	text = text + '\n\nTotal QA coins:' + str(round(qacoin,2))
         self.bot.send_message(chat_id=chat_id, text=text)
-	
+
+
+    def Thistory(self, chat_id):
+	score = 0
+        self._init_con()
+        self.cur.execute(sql.thought_sql.format(
+            chat_id
+        ))
+        thought = self.cur.fetchall()
+        self._close()
+	text = 'Thoughtfulness score:\n'
+        for t in thought:
+	    score += t['thoughtfulness_score']
+	    text=text+'post id:'+str(t['post_id'])+'\n'+'Thoughtfulness score:+'+str(round(t['thoughtfulness_score'],2))+'\n'+str(t['timestamp'])+'\n\n'
+	text = text + '\n\nTotal Thoughtfulness Score:' + str(round(score,2))
+        self.bot.send_message(chat_id=chat_id, text=text)
+
     def _get_tags(self, post_id):
         cursor = self.cur.execute(sql.getTags_sql.format(post_id, config.tag_association))
         return list(self.cur.fetchall())
-    
+
+    # def _update_tags(self, post_id, user_data):
+    #     try:
+    #         self.cur.execute(
+    #             sql.updateTelePostTag_sql.format(
+    #                 post_id, user_data['tags']))
+    #         self.con.commit()
+    #         return True
+    #     except:
+    #         return False
+
     def _update_tags(self, post_id, user_data):
         if len(user_data['tags'])==1:
             k=user_data['tags']
@@ -511,21 +574,7 @@ class Telegram(Forum):
             except:
                 return False
 
+
+
     def add_tag(self, user_data):
-        return self._update_tags(1, user_data)				
-
-
-    def Thistory(self, chat_id):
-	score = 0
-        self._init_con()
-        self.cur.execute(sql.thought_sql.format(
-            chat_id
-        ))
-        thought = self.cur.fetchall()
-        self._close()
-	text = 'Thoughtfulness score:\n'
-        for t in thought:
-	    score += t['thoughtfulness_score']
-	    text=text+'post id:'+str(t['post_id'])+'\n'+'Thoughtfulness score:+'+str(round(t['thoughtfulness_score'],2))+'\n'+str(t['timestamp'])+'\n\n'
-	text = text + '\n\nTotal Thoughtfulness Score:' + str(round(score,2))
-        self.bot.send_message(chat_id=chat_id, text=text)
+        return self._update_tags(1, user_data)
