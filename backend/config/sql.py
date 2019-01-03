@@ -184,7 +184,7 @@ getTags_tele="""SELECT tag_id from tags where tag ={}"""
 
 
 
-getAllTags_sql = """SELECT tag FROM tag"""
+getAllTagsfrom_sql = """SELECT tag FROM tag"""
 
 #getTags_user_chosen_sql="""SELECT tag_id as 'key',tag as'label' from tag WHERE tag_id in (SELECT tag_id from post_tag WHERE post_id={})"""
 
