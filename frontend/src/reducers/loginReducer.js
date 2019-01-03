@@ -56,6 +56,7 @@ export default function LoginReducer(state={
         case "GET_LOGIN_SUCCEED": {
             sessionStorage.setItem("access_token", action.payload.access_token);
             sessionStorage.setItem("userId", action.payload.userId);
+            sessionStorage.setItem("default_section", action.payload.section_id);
             browserHistory.push("/cat/home");
             return {
                 ...state,
