@@ -1,8 +1,8 @@
-db_username = "jeanchen"
-db_password = "LARCdata9696"
+db_username = "avsingh"
+db_password = "LARCdata9153"
 db_host = "10.0.106.72"
 db_port = 3307
-db_schema = "jeanchen"
+db_schema = "avsingh"
 
 tag_association = 0.1
 
