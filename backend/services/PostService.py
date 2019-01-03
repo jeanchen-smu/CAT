@@ -364,7 +364,7 @@ class Post(Forum):
 	end_time = time.time()
 	print end_time-start_time
         X = np.column_stack([self.v1,self.v2,self.v3,self.v4,self.v5,self.v6,self.v7,self.v8,self.v9,self.v10,self.v11,v12])
-        filename = "/home/jeanc/rfr_model.sav"
+        filename = "/home/avsingh/rfr_model.sav"
         rfr = joblib.load(filename)
         mark = rfr.predict(X)[0]
         return round(mark,2)
