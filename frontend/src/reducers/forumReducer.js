@@ -18,7 +18,9 @@ export default function ForumReducer(state={
     sessions:[],
     filter:{
         topic_id: 0,
-        session: 0
+        session: 0,
+	section_id: 0
+	  
     },
     search: false,
     tags:[],
@@ -141,7 +143,8 @@ export default function ForumReducer(state={
                 ...state,
                 filter: {
                     ...state.filter,
-                    topic_id: action.payload
+                    topic_id: action.payload.topic,
+		    section_id: action.payload.section
                 }
             }
         }
