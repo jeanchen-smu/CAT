@@ -131,10 +131,13 @@ export function CloseSearch(){
     }
 }
 
-export function UpdateTopic(topic){
+export function UpdateTopic(topic,section){
     return {
         type: "UPDATE_TOPIC_ID",
-        payload: topic
+        payload: {
+                    topic: topic,
+                    section: section
+                }
     }
 }
 
