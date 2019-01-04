@@ -66,12 +66,12 @@ class DashboardPage extends React.Component {
     // }
 
     handleTopicChange(event, index, value) {
-        this.props.updateTopic({value}.value);
+        this.props.updateTopic({value}.value, this.props.section_id);
         this.props.getPosts(
             sessionStorage.getItem("access_token"),
             {
                 topic_id: {value}.value,
-                section_id: this.props.session,
+                section_id: this.props.section_id,
                 userId: this.props.userId
             }
         )
@@ -162,7 +162,8 @@ const mapStateToProps = (state) => {
       search: state.forum.search,
       topic: state.forum.filter.topic_id,
       session: state.forum.filter.session,
-      isTeacher: state.login.user.is_teacher
+      isTeacher: state.login.user.is_teacher,
+      section_id: state.login.user.section_id
   };
 };
 
@@ -192,8 +193,8 @@ const mapDispatchToProps = (dispatch) => {
     closeSearch: () => {
         dispatch(CloseSearch())
     },
-    updateTopic: (topic) => {
-        dispatch(UpdateTopic(topic))
+    updateTopic: (topic, section) => {
+        dispatch(UpdateTopic(topic, section))
     },
     // updateSection: (section) => {
     //     dispatch(UpdateSection(section))
