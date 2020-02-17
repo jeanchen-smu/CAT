@@ -8,6 +8,8 @@ pip install --only-binary :all: mysqlclient
 pip install gensim
 pip install sklearn
 pip install telegram
+pip install python-telegram-bot
 pip install uritools
 pip install regex
+pip install gevent
 python api.py
