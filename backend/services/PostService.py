@@ -86,6 +86,7 @@ class Post(Forum):
             ], shell=True)
 
     def getPosts(self, filter):
+        self._init_con()
         if 'topic_id' in filter and filter['topic_id'] !=0 :
             self.cur.execute(sql.getPostsByTopicSection_sql.format(filter['topic_id'], config.tag_association, filter['section_id']))
         else:
